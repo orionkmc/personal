@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% load  static %}
+
+{% block content %}
+  <h1>Agregar gerente</h1>
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+    <a href="{% url 'locals_app:panel' %}">Vovler</a>
+  </form>
+{% endblock content %}
