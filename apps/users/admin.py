@@ -13,6 +13,7 @@ class UserAdmin(UserAdmin):
             'type_user',
             'phone',
             'image',
+            'qr',
         )}),
 
         (_('Permissions'), {
@@ -38,7 +39,7 @@ class UserAdmin(UserAdmin):
             ),
         }),
     )
-    list_display = ('email', 'first_name', 'last_name', 'type_user',)
+    list_display = ('qr_thumbnail', 'email', 'first_name', 'last_name', 'type_user',)
     search_fields = ('first_name', 'last_name', 'email',)
     list_filter = ('type_user', 'is_staff', 'is_active', 'is_superuser')
     ordering = ('email', )

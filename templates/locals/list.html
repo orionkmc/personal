@@ -50,6 +50,7 @@
             <thead>
               <tr>
                 <td>Foto</td>
+                <td>QR</td>
                 <td>Nombre completo</td>
                 <td>Email</td>
                 <td>Telefono</td>
@@ -68,6 +69,7 @@
               {% for m in local.manager_set.all %}
                 <tr>
                   <td><img src="{{ m.manager.image }}" alt="" width="50"></td>
+                  <td><img src="{{ m.manager.qr }}" alt="" width="50"></td>
                   <td>{{ m.manager.get_full_name }}</td>
                   <td>{{ m.manager.email }}</td>
                   <td>{{ m.manager.phone }}</td>
@@ -85,6 +87,7 @@
             <thead>
               <tr>
                 <td>Foto</td>
+                <td>QR</td>
                 <td>Nombre completo</td>
                 <td>Email</td>
                 <td>Telefono</td>
@@ -103,6 +106,7 @@
               {% for e in local.employee_set.all %}
                 <tr>
                   <td><img src="{{ e.employee.image }}" alt="" width="50"></td>
+                  <td><img src="{{ e.employee.qr }}" alt="" width="50"></td>
                   <td>{{ e.employee.get_full_name }}</td>
                   <td>{{ e.employee.email }}</td>
                   <td>{{ e.employee.phone }}</td>

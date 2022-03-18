@@ -3,6 +3,8 @@ from django.db import models
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
+from django.utils import timezone
+from datetime import date, timedelta
 
 
 class Local(models.Model):
@@ -40,9 +42,11 @@ class Employee(models.Model):
     employee = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Empleado', related_name='employee'
     )
-    due_date = models.DateField(verbose_name='Fecha de vencimiento')
+    due_date = models.DateField(verbose_name='Fecha de vencimiento', default=timezone.now)
 
     def save(self, *args, **kwargs):
+        if not self.id:
+            self.due_date = date.today() + timedelta(30)
         return super(Employee, self).save(*args, **kwargs)
 
     def __str__(self):

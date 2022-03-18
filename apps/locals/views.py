@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (View, ListView)
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from datetime import date, timedelta
+from datetime import timedelta
 
 # apps
 from apps.locals.models import Local
@@ -116,3 +116,7 @@ class RenovateView(LoginRequiredMixin, View):
         e.update(due_date=td)
         messages.add_message(request, messages.SUCCESS, 'Empleado Renovado')
         return redirect('locals_app:panel')
+
+
+def generate_qrcode(request):
+    return render(request, 'qr.html')
