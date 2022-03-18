@@ -41,8 +41,8 @@
           </div>
           <br>
           <h3>
-            Gerentes
-            {% if user.type_user == 1 %}
+            Gerentes 
+            {% if user.type_user == '1' %}
               <a href="{% url 'locals_app:manager-add' local.slug  %}" class="btn btn-primary">agregar</a>
             {% endif %}
           </h3>
@@ -55,7 +55,7 @@
                 <td>Email</td>
                 <td>Telefono</td>
                 <td>Editar</td>
-                {% if user.type_user == 1 %}
+                {% if user.type_user == '1' %}
                   <td>
                     Eliminar
                     <form id="delete_manager" action="" method="POST">
@@ -74,7 +74,7 @@
                   <td>{{ m.manager.email }}</td>
                   <td>{{ m.manager.phone }}</td>
                   <td><a class="btn btn-primary" href="{% url 'locals_app:manager-update' local.slug m.manager.pk %} ">Editar</a></td>
-                  {% if user.type_user == 1 %}
+                  {% if user.type_user == '1' %}
                     <td><button class="btn btn-danger" onclick="DeleteManager('{% url "locals_app:manager-delete" m.pk %}', '#delete_manager')">Eliminar</button></td>
                   {% endif %}
                 </tr>
