@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (View, ListView)
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from datetime import date, timedelta
 
 # apps
 from apps.locals.models import Local
@@ -105,4 +106,13 @@ class EmployeeDeleteView(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         Employee.objects.get(pk=pk).delete()
         messages.add_message(request, messages.SUCCESS, 'Empleado Eliminado')
+        return redirect('locals_app:panel')
+
+
+class RenovateView(LoginRequiredMixin, View):
+    def get(self, request, pk, days, *args, **kwargs):
+        e = Employee.objects.filter(pk=pk)
+        td = e[0].due_date + timedelta(days)
+        e.update(due_date=td)
+        messages.add_message(request, messages.SUCCESS, 'Empleado Renovado')
         return redirect('locals_app:panel')

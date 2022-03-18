@@ -40,11 +40,9 @@ class Employee(models.Model):
     employee = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Empleado', related_name='employee'
     )
-    contact_date = models.DateField()
+    due_date = models.DateField(verbose_name='Fecha de vencimiento')
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.created = timezone.now()
         return super(Employee, self).save(*args, **kwargs)
 
     def __str__(self):

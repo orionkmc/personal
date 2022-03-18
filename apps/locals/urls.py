@@ -14,4 +14,6 @@ urlpatterns = [
     path('<str:local>/empleado/agregar', views.EmployeeCreateView.as_view(), name='employee-add'),
     path('<str:local>/empleado/<pk>/', views.EmployeeUpdateView.as_view(), name='employee-update'),
     path('empleado/eliminar/<pk>/', views.EmployeeDeleteView.as_view(), name='employee-delete'),
+
+    path('renovate/<int:pk>/<int:days>', views.RenovateView.as_view(), name='renovate'),
 ]
