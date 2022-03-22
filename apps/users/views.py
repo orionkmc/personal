@@ -8,6 +8,7 @@ from django.views.generic.edit import (
 from django.views.generic import (View)
 
 # Apps
+from apps.locals.models import Local
 from .forms import (
     LoginForm,
 )
@@ -16,7 +17,13 @@ from .forms import (
 class LoginUser(FormView):
     template_name = 'users/login.html'
     form_class = LoginForm
-    success_url = reverse_lazy('locals_app:panel')
+
+    def get_success_url(self):
+        if self.request.user.type_user == '1':
+            ls = Local.objects.filter(owner=self.request.user)
+        elif self.request.user.type_user == '2':
+            ls = Local.objects.filter(manager__manager=self.request.user)
+        return reverse_lazy('locals_app:panel', kwargs={'local': ls.first().slug})
 
     def form_valid(self, form):
         user = authenticate(

@@ -4,7 +4,8 @@ from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from django.utils import timezone
-from datetime import date, timedelta
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 
 class Local(models.Model):
@@ -46,7 +47,7 @@ class Employee(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.due_date = date.today() + timedelta(30)
+            self.due_date = date.today() + relativedelta(months=1)
         return super(Employee, self).save(*args, **kwargs)
 
     def __str__(self):
