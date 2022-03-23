@@ -23,6 +23,20 @@ def local_(user):
         return Local.objects.filter(manager__manager=user)
 
 
+class UserView(View):
+    def get(self, request, email, *args, **kwargs):
+        try:
+            user = User.objects.get(email=email)
+            exist = True
+        except:
+            user = ''
+            exist = False
+        return render(request, 'user.html', {
+            'user': user,
+            'exist': exist,
+        })
+
+
 class PanelView(LoginRequiredMixin, View):
     def get(self, request, local, *args, **kwargs):
         return render(request, 'locals/list.html', {
