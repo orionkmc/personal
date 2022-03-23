@@ -6,8 +6,9 @@ from .models import User
 
 class UserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('dni', 'password')}),
         (_('Personal info'), {'fields': (
+            'email',
             'first_name',
             'last_name',
             'type_user',
@@ -28,6 +29,7 @@ class UserAdmin(UserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': (
+                'dni',
                 'email',
                 'first_name',
                 'last_name',
@@ -39,9 +41,9 @@ class UserAdmin(UserAdmin):
             ),
         }),
     )
-    list_display = ('qr_thumbnail', 'email', 'first_name', 'last_name', 'type_user',)
-    search_fields = ('first_name', 'last_name', 'email',)
+    list_display = ('qr_thumbnail', 'dni', 'email', 'first_name', 'last_name', 'type_user',)
+    search_fields = ('dni', 'first_name', 'last_name', 'email',)
     list_filter = ('type_user', 'is_staff', 'is_active', 'is_superuser')
-    ordering = ('email', )
+    ordering = ('dni', )
 
 admin.site.register(User, UserAdmin)

@@ -69,7 +69,7 @@ class ManagerCreateView(View):
         if form.is_valid():
             form.save(local=local, type_user='manager')
             messages.add_message(request, messages.SUCCESS, 'Gerente creado')
-            return redirect('locals_app:panel')
+            return redirect('locals_app:panel', local=local)
         return render(request, 'locals/manager/add_manager.html', {
             'form': form,
             'local': Local.objects.get(slug=local),
@@ -78,7 +78,6 @@ class ManagerCreateView(View):
 
 
 class ManagerUpdateView(View):
-
     def get(self, request, local, pk, *args, **kwargs):
         return render(request, 'locals/manager/update_manager.html', {
             'form': UserUpdateForm(instance=User.objects.get(pk=pk)),
@@ -91,7 +90,7 @@ class ManagerUpdateView(View):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, 'Gerente editado')
-            return redirect('locals_app:panel')
+            return redirect('locals_app:panel', local=local)
         return render(request, 'locals/manager/add_manager.html', {
             'form': form,
             'local': Local.objects.get(slug=local),
@@ -121,7 +120,7 @@ class EmployeeCreateView(View):
         if form.is_valid():
             form.save(local=local, type_user='employee')
             messages.add_message(request, messages.SUCCESS, 'Empleado creado')
-            return redirect('locals_app:panel')
+            return redirect('locals_app:panel', local=local)
         return render(request, 'locals/manager/add_manager.html', {
             'form': form,
             'local': Local.objects.get(slug=local),
@@ -143,7 +142,7 @@ class EmployeeUpdateView(View):
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, 'Empleado editado')
-            return redirect('locals_app:panel')
+            return redirect('locals_app:panel', local=local)
         return render(request, 'locals/manager/add_manager.html', {
             'form': form,
             'local': Local.objects.get(slug=local),

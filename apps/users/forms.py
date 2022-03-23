@@ -5,10 +5,10 @@ from django.contrib.auth import authenticate
 
 
 class LoginForm(forms.Form):
-    email = forms.CharField(
+    dni = forms.CharField(
         label='E-mail',
         required=True,
-        widget=forms.TextInput(
+        widget=forms.NumberInput(
             attrs={
                 'id': 'form1Example1',
                 'class': 'form-control',
@@ -27,10 +27,10 @@ class LoginForm(forms.Form):
     )
 
     def clean(self):
-        email = self.cleaned_data['email']
+        dni = self.cleaned_data['dni']
         password = self.cleaned_data['password']
 
-        if not authenticate(email=email, password=password):
+        if not authenticate(dni=dni, password=password):
             raise forms.ValidationError(
                 'Los datos de usuario no son correctos'
             )

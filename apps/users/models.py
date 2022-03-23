@@ -21,23 +21,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('3', 'Staff'),
     ]
 
-    email = models.EmailField(unique=True)
-    type_user = models.CharField(
-        "Tipo de Usuario", max_length=1, choices=TYPE_USER,
-        default='3'
-    )
+    dni = models.IntegerField(unique=True)
+    email = models.EmailField(blank=True, null=True)
+    type_user = models.CharField("Tipo de Usuario", max_length=1, choices=TYPE_USER, default='3')
     first_name = models.CharField('Nombres', max_length=100)
     last_name = models.CharField('Apellidos', max_length=100)
-    phone = models.CharField(
-        'Telefono', max_length=100, help_text="809-472-2626", blank=True
-    )
+    phone = models.CharField('Telefono', max_length=100, help_text="809-472-2626", blank=True, null=True)
     image = models.ImageField('foto', upload_to='media/user/employees')
     qr = models.ImageField(upload_to='media/user/qrcode', blank=True)
+
     #
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'dni'
 
     REQUIRED_FIELDS = [
         'first_name', 'last_name', 'type_user'
@@ -59,11 +56,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     qr_thumbnail.allow_tags = True
 
     def __str__(self):
-        return self.email
+        return self.get_full_name()
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            url = 'http://personal.devotoshopping.com.ar/{}'.format(self.email)
+            url = 'http://personal.devotoshopping.com.ar/{}'.format(self.dni)
             qrcode_img = qrcode.make(url)
             canvas = Image.new("RGB", (400, 400), "white")
             ImageDraw.Draw(canvas)

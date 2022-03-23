@@ -16,18 +16,23 @@
         {% csrf_token %}
 
         <div class="form-outline mb-4">
+          {{ form.dni }}
+          <label for="" class="form-label">{{ form.dni.label }} *</label>
+        </div>
+
+        <div class="form-outline mb-4">
           {{ form.email }}
           <label for="" class="form-label">{{ form.email.label }}</label>
         </div>
 
         <div class="form-outline mb-4">
           {{ form.first_name }}
-          <label for="" class="form-label">{{ form.first_name.label }}</label>
+          <label for="" class="form-label">{{ form.first_name.label }} *</label>
         </div>
 
         <div class="form-outline mb-4">
           {{ form.last_name }}
-          <label for="" class="form-label">{{ form.last_name.label }}</label>
+          <label for="" class="form-label">{{ form.last_name.label }} *</label>
         </div>
 
         <div class="form-outline mb-4">

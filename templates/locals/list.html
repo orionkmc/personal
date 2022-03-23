@@ -12,29 +12,19 @@
   <div class="card">
     <div class="card-header text-center py-3">
       <h5 class="mb-0 text-center">
-        <strong>Panel</strong>
+        <strong>Panel {{ local.name }}</strong>
       </h5>
     </div>
 
     <div class="card-body">
       {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-          {% endfor %}
-        </ul>
+        {% for message in messages %}
+          <div class="alert alert-dismissible fade show alert-success" role="alert" data-mdb-color="warning" id="customxD">
+            {{ message }}
+            <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
       {% endif %}
- 
-      <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">{{ local.name }}</h5>
-          <p class="card-text">
-            <img src="/{{ local.logo }}" alt="" width="80">
-            <h3>{{ local.owner.get_full_name }}</h3>
-            <h3>{{ local.phone }}</h3>
-          </p>
-        </div>
-      </div>
 
       <br>
       <h3>
@@ -49,6 +39,7 @@
             <tr>
               <td>Foto</td>
               <td>QR</td>
+              <td>Dni</td>
               <td>Nombre completo</td>
               <td>Email</td>
               <td>Telefono</td>
@@ -76,9 +67,10 @@
                     <img src="/{{ m.manager.qr }}" alt="" width="50">
                   </a>
                 </td>
+                <td>{{ m.manager.dni }}</td>
                 <td>{{ m.manager.get_full_name }}</td>
-                <td>{{ m.manager.email }}</td>
-                <td>{{ m.manager.phone }}</td>
+                <td>{{ m.manager.email|default_if_none:"-" }}</td>
+                <td>{{ m.manager.phone|default_if_none:"-" }}</td>
                 {% if user.type_user == '1' %}
                 <td><a class="btn btn-warning px-3" href="{% url 'locals_app:manager-update' local.slug m.manager.pk %} "><i class="fas fa-edit"></i></a></td>
                   <td><button class="btn btn-danger px-3" onclick="DeleteManager('{% url "locals_app:manager-delete" local.slug m.pk %}', '#delete_manager')"><i class="fa-solid fa-trash"></i></button></td>
@@ -96,6 +88,7 @@
             <tr>
               <td>Foto</td>
               <td>QR</td>
+              <td>Dni</td>
               <td>Nombre completo</td>
               <td>Email</td>
               <td>Telefono</td>
@@ -126,9 +119,10 @@
                   </a>
                 </td>
 
+                <td>{{ e.employee.dni }}</td>
                 <td>{{ e.employee.get_full_name }}</td>
-                <td>{{ e.employee.email }}</td>
-                <td>{{ e.employee.phone }}</td>
+                <td>{{ e.employee.email|default_if_none:"-" }}</td>
+                <td>{{ e.employee.phone|default_if_none:"-" }}</td>
                 <td>{{ e.due_date|date:"F, Y" }}</td>
                 {% if renovate %}
                   <td><a href="{% url 'locals_app:renovate' local.slug e.pk 2  %}" class="btn btn-success px-3"><i class="fa-solid fa-arrows-rotate"></i></a></td>
@@ -149,7 +143,7 @@
 {% block js %}
   <script src="{% static 'lightgallery/js/lightgallery.min.js' %}"></script>
   <script>
-    function DeleteManager(url, id, url){
+    function DeleteManager(url, id){
       var result = confirm("Estas seguro?");
       if (result == true) {
         let delete_manager = document.querySelector(id)

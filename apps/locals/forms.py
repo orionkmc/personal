@@ -5,8 +5,16 @@ from apps.locals.models import Local, Manager, Employee
 
 
 class ManagerForm(forms.Form):
-    email = forms.CharField(
+    dni = forms.CharField(
         required=True,
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+            }
+        )
+    )
+    email = forms.CharField(
+        required=False,
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
@@ -33,7 +41,7 @@ class ManagerForm(forms.Form):
     )
 
     phone = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -51,17 +59,16 @@ class ManagerForm(forms.Form):
     )
 
     def save(self, local, type_user, commit=True):
-
         data = self.cleaned_data
         user, created = User.objects.get_or_create(
-            email=data['email'],
+            dni=data['dni'],
             defaults={
+                'email': data['email'],
                 'first_name': data['first_name'],
                 'last_name': data['last_name'],
                 'phone': data['phone'],
                 'image': data['image'],
                 'type_user': 2,
-
             },
         )
         if type_user == 'manager':
@@ -76,9 +83,14 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'phone', 'image', )
+        fields = ('dni', 'email', 'first_name', 'last_name', 'phone', 'image', )
 
         widgets = {
+            'dni': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
             'email': forms.TextInput(
                 attrs={
                     'class': 'form-control',
