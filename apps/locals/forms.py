@@ -9,7 +9,6 @@ class ManagerForm(forms.Form):
         required=True,
         widget=forms.EmailInput(
             attrs={
-                'placeholder': '',
                 'class': 'form-control',
             }
         )
@@ -19,7 +18,6 @@ class ManagerForm(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': '',
                 'class': 'form-control',
             }
         )
@@ -29,7 +27,6 @@ class ManagerForm(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': '',
                 'class': 'form-control',
             }
         )
@@ -39,14 +36,18 @@ class ManagerForm(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': '',
                 'class': 'form-control',
             }
         )
     )
 
     image = forms.ImageField(
-        required=True
+        required=True,
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control',
+            }
+        )
     )
 
     def save(self, local, type_user, commit=True):
@@ -76,3 +77,31 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name', 'phone', 'image', )
+
+        widgets = {
+            'email': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'first_name': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'last_name': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'phone': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'image': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+        }

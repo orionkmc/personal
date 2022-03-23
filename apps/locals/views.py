@@ -8,7 +8,7 @@ from django.contrib import messages
 from apps.locals.models import Local
 from apps.locals.forms import ManagerForm, UserUpdateForm
 from apps.users.models import User
-from apps.locals.models import Manager, Employee
+from apps.locals.models import Employee
 
 # other
 from dateutil.relativedelta import relativedelta
@@ -16,15 +16,17 @@ import datetime
 # from datetime import date
 
 
+def local_(user):
+    if user.type_user == '1':
+        return Local.objects.filter(owner=user)
+    elif user.type_user == '2':
+        return Local.objects.filter(manager__manager=user)
+
+
 class PanelView(LoginRequiredMixin, View):
     def get(self, request, local, *args, **kwargs):
-        if self.request.user.type_user == '1':
-            ls = Local.objects.filter(owner=self.request.user)
-        elif self.request.user.type_user == '2':
-            ls = Local.objects.filter(manager__manager=self.request.user)
-
         return render(request, 'locals/list.html', {
-            'locals': ls,
+            'locals': local_(self.request.user),
             'local': Local.objects.get(slug=local),
         })
 
@@ -33,7 +35,8 @@ class ManagerCreateView(View):
     def get(self, request, local, *args, **kwargs):
         return render(request, 'locals/manager/add_manager.html', {
             'form': ManagerForm(),
-            'local': local
+            'local': Local.objects.get(slug=local),
+            'locals': local_(request.user),
         })
 
     def post(self, request, local, *args, **kwargs):
@@ -44,7 +47,9 @@ class ManagerCreateView(View):
             messages.add_message(request, messages.SUCCESS, 'Gerente creado')
             return redirect('locals_app:panel')
         return render(request, 'locals/manager/add_manager.html', {
-            'form': form
+            'form': form,
+            'local': Local.objects.get(slug=local),
+            'locals': local_(request.user),
         })
 
 
@@ -53,7 +58,8 @@ class ManagerUpdateView(View):
     def get(self, request, local, pk, *args, **kwargs):
         return render(request, 'locals/manager/update_manager.html', {
             'form': UserUpdateForm(instance=User.objects.get(pk=pk)),
-            'local': local,
+            'local': Local.objects.get(slug=local),
+            'locals': local_(request.user),
         })
 
     def post(self, request, local, pk, *args, **kwargs):
@@ -64,7 +70,8 @@ class ManagerUpdateView(View):
             return redirect('locals_app:panel')
         return render(request, 'locals/manager/add_manager.html', {
             'form': form,
-            'local': local
+            'local': Local.objects.get(slug=local),
+            'locals': local_(request.user),
         })
 
 
@@ -80,7 +87,8 @@ class EmployeeCreateView(View):
     def get(self, request, local, *args, **kwargs):
         return render(request, 'locals/manager/add_manager.html', {
             'form': ManagerForm(),
-            'local': local
+            'local': Local.objects.get(slug=local),
+            'locals': local_(request.user),
         })
 
     def post(self, request, local, *args, **kwargs):
@@ -92,7 +100,8 @@ class EmployeeCreateView(View):
             return redirect('locals_app:panel')
         return render(request, 'locals/manager/add_manager.html', {
             'form': form,
-            'local': local
+            'local': Local.objects.get(slug=local),
+            'locals': local_(request.user),
         })
 
 
@@ -101,7 +110,8 @@ class EmployeeUpdateView(View):
     def get(self, request, local, pk, *args, **kwargs):
         return render(request, 'locals/manager/update_manager.html', {
             'form': UserUpdateForm(instance=User.objects.get(pk=pk)),
-            'local': local
+            'local': Local.objects.get(slug=local),
+            'locals': local_(request.user),
         })
 
     def post(self, request, local, pk, *args, **kwargs):
@@ -112,7 +122,8 @@ class EmployeeUpdateView(View):
             return redirect('locals_app:panel')
         return render(request, 'locals/manager/add_manager.html', {
             'form': form,
-            'local': local
+            'local': Local.objects.get(slug=local),
+            'locals': local_(request.user),
         })
 
 
@@ -134,10 +145,6 @@ class RenovateView(LoginRequiredMixin, View):
         messages.add_message(request, messages.SUCCESS, 'Empleado Renovado')
 
         return redirect('locals_app:panel')
-
-
-def generate_qrcode(request):
-    return render(request, 'qr.html')
 
 
 def last_day_of_month(date):

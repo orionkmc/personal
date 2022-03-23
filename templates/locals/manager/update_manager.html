@@ -3,11 +3,54 @@
 {% load  static %}
 
 {% block content %}
-  <h1>Agregar gerente</h1>
-  <form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-    <a href="{% url 'locals_app:panel' local %}">Vovler</a>
-  </form>
+<section class="mb-4">
+  <div class="card">
+    <div class="card-header text-center py-3">
+      <h5 class="mb-0 text-center">
+        <strong>Editar datos</strong>
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <form action="" method="POST" enctype="multipart/form-data" class="rounded-5">
+        {% csrf_token %}
+
+        <div class="form-outline mb-4">
+          {{ form.email }}
+          <label for="" class="form-label">{{ form.email.label }}</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          {{ form.first_name }}
+          <label for="" class="form-label">{{ form.first_name.label }}</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          {{ form.last_name }}
+          <label for="" class="form-label">{{ form.last_name.label }}</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          {{ form.phone }}
+          <label for="" class="form-label">{{ form.phone.label }}</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          <img
+            src="/{{ form.image.value }}"
+            class="img-fluid rounded"
+            alt=""
+            width="150"
+          />
+        </div>
+        <div class="form-outline mb-4">
+          {{ form.image }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'locals_app:panel' local.slug %}" class="btn btn-info">Volver</a>
+      </form>
+    </div>
+  </div>
+</section>
 {% endblock content %}

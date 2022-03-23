@@ -16,6 +16,4 @@ urlpatterns = [
     path('empleado/eliminar/<str:local>/<pk>/', views.EmployeeDeleteView.as_view(), name='employee-delete'),
 
     path('renovate/<int:pk>/<int:days>', views.RenovateView.as_view(), name='renovate'),
-
-    path('qrcode', views.generate_qrcode, name='qr')
 ]

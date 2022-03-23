@@ -10,8 +10,8 @@ class LoginForm(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
+                'id': 'form1Example1',
                 'class': 'form-control',
-                'placeholder': 'Correo Electronico',
             }
         )
     )
@@ -20,8 +20,8 @@ class LoginForm(forms.Form):
         required=True,
         widget=forms.PasswordInput(
             attrs={
+                'id': 'form1Example2',
                 'class': 'form-control',
-                'placeholder': 'contraseña'
             }
         )
     )

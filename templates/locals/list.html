@@ -1,18 +1,5 @@
 {% extends "base.html" %}
 
-{% block menu %}
-  {% for local in locals %}
-    <a
-      href="#"
-      class="list-group-item list-group-item-action py-2 ripple {% if forloop.counter == 1 %}active{% endif %}"
-      aria-current="true"
-     >
-      <i class="fas fa-tachometer-alt fa-fw me-3"></i
-        ><span>{{ local.name }}</span>
-    </a>
-  {% endfor %}
-{% endblock menu %}
-
 {% block content %}
 <!--Section: Sales Performance KPIs-->
 <section class="mb-4">
@@ -47,7 +34,7 @@
       <h3>
         Gerentes 
         {% if user.type_user == '1' %}
-          <a href="{% url 'locals_app:manager-add' local.slug  %}" class="btn btn-primary">agregar</a>
+          <a href="{% url 'locals_app:manager-add' local.slug  %}" class="btn btn-primary px-3">Agregar <i class="fa-solid fa-plus ms-2"></i></a>
         {% endif %}
       </h3>
       <div class="table-responsive">
@@ -79,8 +66,8 @@
                 <td>{{ m.manager.email }}</td>
                 <td>{{ m.manager.phone }}</td>
                 {% if user.type_user == '1' %}
-                <td><a class="btn btn-primary" href="{% url 'locals_app:manager-update' local.slug m.manager.pk %} ">Editar</a></td>
-                  <td><button class="btn btn-danger" onclick="DeleteManager('{% url "locals_app:manager-delete" local.slug m.pk %}', '#delete_manager')">Eliminar</button></td>
+                <td><a class="btn btn-warning px-3" href="{% url 'locals_app:manager-update' local.slug m.manager.pk %} "><i class="fas fa-edit"></i></a></td>
+                  <td><button class="btn btn-danger px-3" onclick="DeleteManager('{% url "locals_app:manager-delete" local.slug m.pk %}', '#delete_manager')"><i class="fa-solid fa-trash"></i></button></td>
                 {% endif %}
               </tr>
             {% endfor %}
@@ -88,7 +75,7 @@
         </table>
       </div>
       <br>
-      <h3>Empleados <a href="{% url 'locals_app:employee-add' local.slug %}" class="btn btn-primary">agregar</a></h3>
+      <h3>Empleados <a href="{% url 'locals_app:employee-add' local.slug %}" class="btn btn-primary px-3">agregar <i class="fa-solid fa-plus ms-2"></i></a></h3>
       <div class="table-responsive">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -118,9 +105,9 @@
                 <td>{{ e.employee.email }}</td>
                 <td>{{ e.employee.phone }}</td>
                 <td>{{ e.due_date|date:"F, Y" }}</td>
-                <td><a href="{% url 'locals_app:renovate' e.pk 2  %}" class="btn btn-primary">Renovar</a></td>
-                <td><a class="btn btn-primary" href="{% url 'locals_app:employee-update' local.slug e.employee.pk %} ">Editar</a></td>
-                <td><button class="btn btn-danger" onclick="DeleteManager('{% url "locals_app:employee-delete" local.slug e.pk %}', '#delete_employee')">Eliminar</button></td>
+                <td><a href="{% url 'locals_app:renovate' e.pk 2  %}" class="btn btn-success px-3"><i class="fa-solid fa-arrows-rotate"></i></a></td>
+                <td><a class="btn btn-warning px-3" href="{% url 'locals_app:employee-update' local.slug e.employee.pk %} "><i class="fas fa-edit"></i></a></td>
+                <td><button class="btn btn-danger px-3" onclick="DeleteManager('{% url "locals_app:employee-delete" local.slug e.pk %}', '#delete_employee')"><i class="fa-solid fa-trash"></i></button></td>
               </tr>
             {% endfor %}
           </tbody>
