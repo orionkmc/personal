@@ -52,7 +52,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return "{} {}".format(self.first_name, self.last_name)
 
     def qr_thumbnail(self):
-        print(self.qr)
         if self.qr:
             return mark_safe('<img src="/%s" width="140" />' % self.qr)
         return '-'

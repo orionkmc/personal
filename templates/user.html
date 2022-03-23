@@ -49,7 +49,6 @@
         height: 48px;
       }
 
-
       .card .card-header .profile-img {
         width: 130px;
         height: 130px;
@@ -82,7 +81,9 @@
         margin-top: 10px;
         font-size: 14px;
       }
-
+      .card .card-body .job a{
+        color: #fff;
+      }
 
       .card .social-links {
         display: flex;
@@ -109,7 +110,6 @@
         margin-right: 0;
       }
 
-
       .card .card-footer {
         background-color: #c74385;
         border-bottom-left-radius: 15px;
@@ -120,7 +120,6 @@
       .card .card-footer .count {
         font-size: 14px;
       }
-
 
       @media screen and (max-width: 575px) {
         .card {
@@ -142,7 +141,7 @@
       <div class="card-body">
         <p class="name">{{ user.get_full_name }}</p>
         <a href="#" class="mail">{{ user.email }}</a>
-        <p class="job">Developer | Designer</p>
+        <p class="job"><a href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
       </div>
       <!--
       <div class="social-links">

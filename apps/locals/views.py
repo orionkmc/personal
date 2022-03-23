@@ -2,10 +2,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (View, )
 from django.shortcuts import render, redirect
 from django.contrib import messages
-# from datetime import timedelta
 
 # apps
-from apps.locals.models import Local
+from apps.locals.models import Local, Manager
 from apps.locals.forms import ManagerForm, UserUpdateForm
 from apps.users.models import User
 from apps.locals.models import Employee
@@ -39,9 +38,20 @@ class UserView(View):
 
 class PanelView(LoginRequiredMixin, View):
     def get(self, request, local, *args, **kwargs):
+        a = datetime.date.today() + relativedelta(day=31)
+        b = datetime.date.today()
+        # a = datetime.datetime(2024, 2, 1) + relativedelta(day=31)
+        # b = datetime.datetime(2024, 2, 1)
+        c = a - b
+        if c.days < 3:
+            renovate = True
+        else:
+            renovate = False
+
         return render(request, 'locals/list.html', {
             'locals': local_(self.request.user),
             'local': Local.objects.get(slug=local),
+            'renovate': renovate,
         })
 
 
@@ -91,7 +101,7 @@ class ManagerUpdateView(View):
 
 class ManagerDeleteView(LoginRequiredMixin, View):
     def post(self, request, local, pk, *args, **kwargs):
-        # Manager.objects.get(pk=pk).delete()
+        Manager.objects.get(pk=pk).delete()
         messages.add_message(request, messages.SUCCESS, 'Gerente Eliminado')
         return redirect('locals_app:panel', local=local)
 
@@ -149,16 +159,20 @@ class EmployeeDeleteView(LoginRequiredMixin, View):
 
 
 class RenovateView(LoginRequiredMixin, View):
-    def get(self, request, pk, days, *args, **kwargs):
+    def get(self, request, local, pk, days, *args, **kwargs):
         # e = Employee.objects.filter(pk=pk)
         # timedelta(days)
         # td = e[0].due_date + relativedelta(months=1)
-        print(datetime.datetime(2024, 10, 21) + relativedelta(day=31))
+        # datetime.datetime(2024, 10, 21)
+        a = datetime.date.today() + relativedelta(day=31)
+        b = datetime.date.today()
+        c = a - b
+        c.days
 
         # e.update(due_date=td)
         messages.add_message(request, messages.SUCCESS, 'Empleado Renovado')
 
-        return redirect('locals_app:panel')
+        return redirect('locals_app:panel', local=local)
 
 
 def last_day_of_month(date):

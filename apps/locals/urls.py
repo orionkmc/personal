@@ -17,5 +17,5 @@ urlpatterns = [
     path('<str:local>/empleado/<pk>/', views.EmployeeUpdateView.as_view(), name='employee-update'),
     path('empleado/eliminar/<str:local>/<pk>/', views.EmployeeDeleteView.as_view(), name='employee-delete'),
 
-    path('renovate/<int:pk>/<int:days>', views.RenovateView.as_view(), name='renovate'),
+    path('renovate/<str:local>/<int:pk>/<int:days>', views.RenovateView.as_view(), name='renovate'),
 ]

@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% load static %}
+
+{% block css %}
+  <link type="text/css" rel="stylesheet" href=" {% static 'lightgallery/css/lightgallery.min.css' %}" />
+{% endblock css %}
+
 {% block content %}
 <!--Section: Sales Performance KPIs-->
 <section class="mb-4">
@@ -18,7 +24,7 @@
           {% endfor %}
         </ul>
       {% endif %}
-
+ 
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">{{ local.name }}</h5>
@@ -59,9 +65,17 @@
           </thead>
           <tbody>
             {% for m in local.manager_set.all %}
-              <tr>
-                <td><img src="/{{ m.manager.image }}" alt="" width="50"></td>
-                <td><img src="/{{ m.manager.qr }}" alt="" width="50"></td>
+              <tr class="lightgallery">
+                <td>
+                  <a href="/{{ m.manager.image }}" data-lg-size="1600-2400" class="custom-selector">
+                    <img src="/{{ m.manager.image }}" alt="" width="50">
+                  </a>
+                </td>
+                <td>
+                  <a href="/{{ m.manager.qr }}" data-lg-size="1024-800" class="custom-selector">
+                    <img src="/{{ m.manager.qr }}" alt="" width="50">
+                  </a>
+                </td>
                 <td>{{ m.manager.get_full_name }}</td>
                 <td>{{ m.manager.email }}</td>
                 <td>{{ m.manager.phone }}</td>
@@ -86,7 +100,9 @@
               <td>Email</td>
               <td>Telefono</td>
               <td>Mes de Vencimiento</td>
-              <td>Renovar</td>
+              {% if renovate %}
+                <td>Renovar</td>
+              {% endif %}
               <td>Editar</td>
                 <td>
                   Eliminar
@@ -98,14 +114,25 @@
           </thead>
           <tbody>
             {% for e in local.employee_set.all %}
-              <tr>
-                <td><img src="/{{ e.employee.image }}" alt="" width="50"></td>
-                <td><img src="/{{ e.employee.qr }}" alt="" width="50"></td>
+              <tr class="lightgallery">
+                <td>
+                  <a href="/{{ e.employee.image }}" data-lg-size="1600-2400" class="custom-selector">
+                    <img src="/{{ e.employee.image }}" alt="" width="50">
+                  </a>
+                </td>
+                <td>
+                  <a href="/{{ e.employee.qr }}" data-lg-size="1024-800" class="custom-selector">
+                    <img src="/{{ e.employee.qr }}" alt="" width="50">
+                  </a>
+                </td>
+
                 <td>{{ e.employee.get_full_name }}</td>
                 <td>{{ e.employee.email }}</td>
                 <td>{{ e.employee.phone }}</td>
                 <td>{{ e.due_date|date:"F, Y" }}</td>
-                <td><a href="{% url 'locals_app:renovate' e.pk 2  %}" class="btn btn-success px-3"><i class="fa-solid fa-arrows-rotate"></i></a></td>
+                {% if renovate %}
+                  <td><a href="{% url 'locals_app:renovate' local.slug e.pk 2  %}" class="btn btn-success px-3"><i class="fa-solid fa-arrows-rotate"></i></a></td>
+                {% endif %}
                 <td><a class="btn btn-warning px-3" href="{% url 'locals_app:employee-update' local.slug e.employee.pk %} "><i class="fas fa-edit"></i></a></td>
                 <td><button class="btn btn-danger px-3" onclick="DeleteManager('{% url "locals_app:employee-delete" local.slug e.pk %}', '#delete_employee')"><i class="fa-solid fa-trash"></i></button></td>
               </tr>
@@ -120,6 +147,7 @@
 {% endblock content %}
 
 {% block js %}
+  <script src="{% static 'lightgallery/js/lightgallery.min.js' %}"></script>
   <script>
     function DeleteManager(url, id, url){
       var result = confirm("Estas seguro?");
@@ -130,4 +158,15 @@
       }
     }
   </script>
+  <script type="text/javascript">
+
+    var lg = document.querySelectorAll('.lightgallery');
+    for ( var i = 0; i < lg.length; i++ ) {
+        lightGallery( lg[i], {
+        selector: '.custom-selector'
+      });
+    }
+
+</script>
 {% endblock js %}
+
