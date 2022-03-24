@@ -23,9 +23,9 @@ def local_(user):
 
 
 class UserView(View):
-    def get(self, request, email, *args, **kwargs):
+    def get(self, request, dni, *args, **kwargs):
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(dni=dni)
             exist = True
         except:
             user = ''

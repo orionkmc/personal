@@ -6,7 +6,7 @@ from . import views
 app_name = "locals_app"
 
 urlpatterns = [
-    path('<str:email>', views.UserView.as_view(), name='user'),
+    path('<str:dni>', views.UserView.as_view(), name='user'),
 
     path('panel/<str:local>', views.PanelView.as_view(), name='panel'),
     path('<str:local>/gerente/agregar', views.ManagerCreateView.as_view(), name='manager-add'),

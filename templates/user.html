@@ -140,8 +140,15 @@
       </div>
       <div class="card-body">
         <p class="name">{{ user.get_full_name }}</p>
-        <a href="#" class="mail">{{ user.email }}</a>
-        <p class="job"><a href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
+        <p>{{ user.get_type_user_display }}</p>
+        <p>{{ user.dni }}</p>
+
+        {% if user.email %}
+          <a href="#" class="mail">{{ user.email }}</a>
+        {% endif %}
+        {% if user.phone %}
+          <p class="job"><a href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
+        {% endif %}
       </div>
       <!--
       <div class="social-links">
