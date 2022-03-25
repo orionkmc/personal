@@ -29,7 +29,7 @@ class UserView(View):
             user = User.objects.get(dni=dni)
 
             a = datetime.date.today()
-            # a = datetime.datetime(2022, 2, 1)
+            # a = datetime.datetime(2022, 4, 1)
             for x in user.employee.all():
                 if x.due_date.strftime("%Y-%m-%d") >= a.strftime("%Y-%m-%d"):
                     context['valid'] = True

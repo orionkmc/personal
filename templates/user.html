@@ -56,9 +56,15 @@
         position: absolute;
         left: 50%;
         transform: translate(-50%, -50%);
-        border: 8px solid #c74385;
         box-shadow: 0 0 20px #00000033;
         background: #fff;
+      }
+
+      .card .card-header.vencido .profile-img {
+        border: 8px solid rgba(249,49,84,1)!important;
+      }
+      .card .card-header.activo .profile-img {
+        border: 8px solid rgba(0,183,74,1)!important;
       }
 
       .card .card-body {
@@ -69,7 +75,6 @@
         margin-top: 30px;
         font-size: 22px;
         font-weight: bold;
-        color: #c74385;
       }
 
       .card .card-body .mail {
@@ -90,6 +95,7 @@
         justify-content: center;
         align-items: center;
         margin-top: 30px;
+        flex-direction: column;
       }
 
       .card .social-links .social-icon {
@@ -140,7 +146,7 @@
 <body>
   {% if exist %}
     <div class="card">
-      <div class="card-header">
+      <div class="card-header {% if valid %}activo{% else %}vencido{% endif %}">
         <img src="{{ user.image }}" alt="Profile Image" class="profile-img">
       </div>
       <div class="card-body">
@@ -155,11 +161,13 @@
           <p class="job"><a href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
         {% endif %}
 
-        <h3>Local</h3>
         <div class="social-links">
-          {% for e in user.employee.all %}
-            <img src="{{ e.local.logo }}" alt="Profile Image" class="profile-img" width='50'>
-          {% endfor %}
+          <h3>Local</h3>
+          <div>
+            {% for e in user.employee.all %}
+              <img src="{{ e.local.logo }}" alt="Profile Image" class="profile-img" width='50'>
+            {% endfor %}
+          </div>
         </div>
       </div>
 
