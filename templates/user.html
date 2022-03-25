@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- MDB icon -->
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
     <!-- Font Awesome -->
     <link
       rel="stylesheet"
@@ -68,11 +66,11 @@
       }
 
       .card .card-body {
-        padding: 10px 40px;
+        padding: 35px 40px;
       }
 
       .card .card-body .name {
-        margin-top: 30px;
+        margin-top: 10px;
         font-size: 22px;
         font-weight: bold;
       }
@@ -150,13 +148,13 @@
         <img src="{{ user.image }}" alt="Profile Image" class="profile-img">
       </div>
       <div class="card-body">
+        <div>
+          <img src="{{ user.qr }}" alt="qr" style='width: 50%;'>
+        </div>
         <p class="name">{{ user.get_full_name }}</p>
         <p>{{ user.get_type_user_display }}</p>
         <p>{{ user.dni }}</p>
 
-        {% if user.email %}
-          <a href="#" class="mail">{{ user.email }}</a>
-        {% endif %}
         {% if user.phone %}
           <p class="job"><a href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
         {% endif %}

@@ -15,11 +15,12 @@
       <form action="" method="POST" enctype="multipart/form-data" class="rounded-5">
         {% csrf_token %}
 
-        <div class="form-outline mb-4">
-          {{ form.dni }}
-          <label for="" class="form-label">{{ form.dni.label }} *</label>
-        </div>
-
+        {% if form.dni %}
+          <div class="form-outline mb-4">
+            {{ form.dni }}
+            <label for="" class="form-label">{{ form.dni.label }} *</label>
+          </div>
+        {% endif %}
         <div class="form-outline mb-4">
           {{ form.email }}
           <label for="" class="form-label">{{ form.email.label }}</label>

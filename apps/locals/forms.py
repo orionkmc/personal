@@ -83,14 +83,9 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('dni', 'email', 'first_name', 'last_name', 'phone', 'image', )
+        fields = ('email', 'first_name', 'last_name', 'phone', 'image', )
 
         widgets = {
-            'dni': forms.NumberInput(
-                attrs={
-                    'class': 'form-control',
-                }
-            ),
             'email': forms.TextInput(
                 attrs={
                     'class': 'form-control',
