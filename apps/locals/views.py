@@ -24,24 +24,31 @@ def local_(user):
 
 class UserView(View):
     def get(self, request, dni, *args, **kwargs):
+        context = {}
         try:
             user = User.objects.get(dni=dni)
-            exist = True
-        except:
-            user = ''
-            exist = False
-        return render(request, 'user.html', {
-            'user': user,
-            'exist': exist,
-        })
+
+            a = datetime.date.today()
+            # a = datetime.datetime(2022, 2, 1)
+            for x in user.employee.all():
+                if x.due_date.strftime("%Y-%m-%d") >= a.strftime("%Y-%m-%d"):
+                    context['valid'] = True
+
+            context['user'] = user
+            context['exist'] = True
+        except Exception as e:
+            print(e)
+            context['exist'] = False
+
+        return render(request, 'user.html', context)
 
 
 class PanelView(LoginRequiredMixin, View):
     def get(self, request, local, *args, **kwargs):
         a = datetime.date.today() + relativedelta(day=31)
         b = datetime.date.today()
-        # a = datetime.datetime(2022, 4, 28) + relativedelta(day=31)
-        # b = datetime.datetime(2022, 4, 28)
+        # a = datetime.datetime(2022, 3, 29) + relativedelta(day=31)
+        # b = datetime.datetime(2022, 3, 29)
         c = a - b
         if c.days < 3:
             renovate = True
@@ -160,18 +167,11 @@ class EmployeeDeleteView(LoginRequiredMixin, View):
 class RenovateView(LoginRequiredMixin, View):
     def get(self, request, local, pk, days, *args, **kwargs):
         e = Employee.objects.filter(pk=pk)
-
         # td = e[0].due_date + relativedelta(months=1)
-        # td = datetime.datetime(2022, 4, 28) + relativedelta(months=1)
-        td = datetime.date.today() + relativedelta(months=1)
-        e.update(due_date=td)
 
-        # datetime.timedelta(days)
-        # datetime.datetime(2024, 10, 21)
-        # a = datetime.date.today() + relativedelta(day=31)
-        # b = datetime.date.today()
-        # c = a - b
-        # c.days
+        td = datetime.date.today() + relativedelta(months=1)
+        # td = datetime.datetime(2022, 3, 28) + relativedelta(months=1)
+        e.update(due_date=td)
 
         messages.add_message(request, messages.SUCCESS, 'Empleado Renovado')
         return redirect('locals_app:panel', local=local)

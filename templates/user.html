@@ -35,7 +35,7 @@
       }
 
       .card {
-        max-width: 250px;
+        max-width: 350px;
         margin: 150px auto 0;
         background-color: #42515a;
         box-shadow: 0 10px 90px #00000024;
@@ -111,10 +111,15 @@
       }
 
       .card .card-footer {
-        background-color: #c74385;
         border-bottom-left-radius: 15px;
         border-bottom-right-radius: 15px;
         padding: 20px 0 20px 0;
+      }
+      .card .card-footer.vencido {
+        background-color: rgba(249,49,84,1)!important;
+      }
+      .card .card-footer.activo {
+        background-color: rgba(0,183,74,1)!important;
       }
 
       .card .card-footer .count {
@@ -149,17 +154,21 @@
         {% if user.phone %}
           <p class="job"><a href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
         {% endif %}
-      </div>
-      <!--
-      <div class="social-links">
-        <img src="{{ user.image }}" alt="Profile Image" class="profile-img">
-        <img src="{{ user.image }}" alt="Profile Image" class="profile-img">
-        <img src="{{ user.image }}" alt="Profile Image" class="profile-img">
-      </div>
-      -->
 
-      <div class="card-footer">
-        <p class="count">Activo</p>
+        <h3>Local</h3>
+        <div class="social-links">
+          {% for local in user.employee.all %}
+            <img src="{{ user.image }}" alt="Profile Image" class="profile-img" width='50'>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card-footer {% if valid %}activo{% else %}vencido{% endif %}">
+        {% if valid %}
+          <p class="count">Activo</p>
+        {% else %}
+          <p class="count">Vencido</p>
+        {% endif %}
       </div>
     </div>
   {% else %}
