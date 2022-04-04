@@ -63,14 +63,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.get_full_name()
 
     def save(self, *args, **kwargs):
-        if not self.pk:
-            url = 'http://personal.devotoshopping.com.ar/dni/{}'.format(self.dni)
-            qrcode_img = qrcode.make(url)
-            canvas = Image.new("RGB", (400, 400), "white")
-            ImageDraw.Draw(canvas)
-            canvas.paste(qrcode_img)
-            buffer = BytesIO()
-            canvas.save(buffer, "PNG")
-            self.qr.save('qr.png', File(buffer), save=False)
-            canvas.close()
+        url = 'http://personal.devotoshopping.com.ar/dni/{}'.format(self.dni)
+        qrcode_img = qrcode.make(url)
+        canvas = Image.new("RGB", (400, 400), "white")
+        ImageDraw.Draw(canvas)
+        canvas.paste(qrcode_img)
+        buffer = BytesIO()
+        canvas.save(buffer, "PNG")
+        self.qr.save('qr.png', File(buffer), save=False)
+        canvas.close()
         return super(User, self).save(*args, **kwargs)
