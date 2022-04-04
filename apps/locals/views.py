@@ -1,3 +1,4 @@
+from ast import For
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (View, )
 from django.shortcuts import render, redirect
@@ -5,7 +6,7 @@ from django.contrib import messages
 
 # apps
 from apps.locals.models import Local, Manager
-from apps.locals.forms import ManagerForm, UserUpdateForm
+from apps.locals.forms import ManagerForm, EmployeeForm, ManagerUpdateForm, EmployeeUpdateForm
 from apps.users.models import User
 from apps.locals.models import Employee
 
@@ -22,29 +23,47 @@ def local_(user):
         return Local.objects.filter(manager__manager=user)
 
 
-class UserView(View):
-    def get(self, request, dni, *args, **kwargs):
-        context = {}
-        try:
-            user = User.objects.get(dni=dni)
+def card(dni):
+    context = {}
+    try:
+        user = User.objects.get(dni=dni)
 
-            a = datetime.date.today()
-            # a = datetime.datetime(2022, 4, 1)
+        a = datetime.date.today()
+        # a = datetime.datetime(2022, 4, 1)
+        if user.type_user == 3:
             for x in user.employee.all():
                 if x.due_date.strftime("%Y-%m-%d") >= a.strftime("%Y-%m-%d"):
                     context['valid'] = True
+        else:
+            context['valid'] = True
 
-            context['user'] = user
-            context['exist'] = True
-        except Exception as e:
-            print(e)
-            context['exist'] = False
+        context['user_search'] = user
+        context['exist'] = True
+    except Exception as e:
+        print(e)
+        context['exist'] = False
+    return context
 
-        return render(request, 'user.html', context)
+
+class SearchView(View):
+    def get(self, request, *args, **kargs):
+        context = {}
+        search = request.GET.get('search')
+        if(search and len(search) > 0):
+            context = card(search)
+        return render(request, 'users/entry.html', context)
+
+
+class UserView(View):
+    def get(self, request, dni, *args, **kwargs):
+        return render(request, 'user.html', card(dni))
 
 
 class PanelView(LoginRequiredMixin, View):
     def get(self, request, local, *args, **kwargs):
+        local = Local.objects.get(slug=local)
+        if not request.user.dni == local.owner.dni:
+            return redirect('users_app:user-login')
         a = datetime.date.today() + relativedelta(day=31)
         b = datetime.date.today()
         # a = datetime.datetime(2022, 3, 29) + relativedelta(day=31)
@@ -54,10 +73,9 @@ class PanelView(LoginRequiredMixin, View):
             renovate = True
         else:
             renovate = False
-
         return render(request, 'locals/list.html', {
             'locals': local_(self.request.user),
-            'local': Local.objects.get(slug=local),
+            'local': local,
             'renovate': renovate,
         })
 
@@ -74,7 +92,7 @@ class ManagerCreateView(View):
         form = ManagerForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save(local=local, type_user='manager')
+            form.save(local=local, type_user=2)
             messages.add_message(request, messages.SUCCESS, 'Gerente creado')
             return redirect('locals_app:panel', local=local)
         return render(request, 'locals/manager/add_manager.html', {
@@ -87,13 +105,13 @@ class ManagerCreateView(View):
 class ManagerUpdateView(View):
     def get(self, request, local, pk, *args, **kwargs):
         return render(request, 'locals/manager/update_manager.html', {
-            'form': UserUpdateForm(instance=User.objects.get(pk=pk)),
+            'form': ManagerUpdateForm(instance=User.objects.get(pk=pk)),
             'local': Local.objects.get(slug=local),
             'locals': local_(request.user),
         })
 
     def post(self, request, local, pk, *args, **kwargs):
-        form = UserUpdateForm(request.POST, request.FILES, instance=User.objects.get(pk=pk))
+        form = ManagerUpdateForm(request.POST, request.FILES, instance=User.objects.get(pk=pk))
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, 'Gerente editado')
@@ -116,16 +134,16 @@ class ManagerDeleteView(LoginRequiredMixin, View):
 class EmployeeCreateView(View):
     def get(self, request, local, *args, **kwargs):
         return render(request, 'locals/manager/add_manager.html', {
-            'form': ManagerForm(),
+            'form': EmployeeForm(),
             'local': Local.objects.get(slug=local),
             'locals': local_(request.user),
         })
 
     def post(self, request, local, *args, **kwargs):
-        form = ManagerForm(request.POST, request.FILES)
+        form = EmployeeForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save(local=local, type_user='employee')
+            form.save(local=local, type_user=3)
             messages.add_message(request, messages.SUCCESS, 'Empleado creado')
             return redirect('locals_app:panel', local=local)
         return render(request, 'locals/manager/add_manager.html', {
@@ -139,13 +157,13 @@ class EmployeeUpdateView(View):
 
     def get(self, request, local, pk, *args, **kwargs):
         return render(request, 'locals/manager/update_manager.html', {
-            'form': UserUpdateForm(instance=User.objects.get(pk=pk)),
+            'form': EmployeeUpdateForm(instance=User.objects.get(pk=pk)),
             'local': Local.objects.get(slug=local),
             'locals': local_(request.user),
         })
 
     def post(self, request, local, pk, *args, **kwargs):
-        form = UserUpdateForm(request.POST, request.FILES, instance=User.objects.get(pk=pk))
+        form = EmployeeUpdateForm(request.POST, request.FILES, instance=User.objects.get(pk=pk))
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, 'Empleado editado')

@@ -42,6 +42,19 @@
         </div>
 
         <div class="form-outline mb-4">
+          {{ form.password }}
+          <label for="" class="form-label">Contraseña</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          {{ form.password_again }}
+          <label for="" class="form-label">Confirmar Contraseña</label>
+        </div>
+        {% if form.errors %}
+          <p class="text-error">* Las contraseñas suministradas no coinciden</p>
+        {% endif %}
+
+        <div class="form-outline mb-4">
           <img
             src="/{{ form.image.value }}"
             class="img-fluid rounded"

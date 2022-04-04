@@ -15,6 +15,10 @@ class Local(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Dueño')
     phone = models.CharField('Telefono', max_length=100, help_text="809-472-2626", blank=True)
 
+    class Meta:
+        verbose_name = 'Local'
+        verbose_name_plural = 'Locales'
+
     def __str__(self):
         return "{}".format(self.name)
 
@@ -34,6 +38,10 @@ class Manager(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Gerente', related_name='manager'
     )
 
+    class Meta:
+        verbose_name = 'Gerente'
+        verbose_name_plural = 'Gerentes'
+
     def __str__(self):
         return "{}".format(self.manager.get_full_name())
 
@@ -44,6 +52,10 @@ class Employee(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Empleado', related_name='employee'
     )
     due_date = models.DateField(verbose_name='Fecha de vencimiento', default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Empleado'
+        verbose_name_plural = 'Empleados'
 
     def save(self, *args, **kwargs):
         if not self.id:

@@ -1,13 +1,16 @@
 # Django
+from ast import Try
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.views.generic.edit import (
     FormView
 )
+from django.shortcuts import render
 from django.views.generic import (View)
 
 # Apps
+from apps.users.models import User
 from apps.locals.models import Local
 from .forms import (
     LoginForm,

@@ -145,25 +145,25 @@
   {% if exist %}
     <div class="card">
       <div class="card-header {% if valid %}activo{% else %}vencido{% endif %}">
-        <img src="{{ user.image }}" alt="Profile Image" class="profile-img">
+        <img src="{{ user_search.image.url }}" alt="Profile Image" class="profile-img">
       </div>
       <div class="card-body">
         <div>
-          <img src="{{ user.qr }}" alt="qr" style='width: 50%;'>
+          <img src="{{ user_search.qr.url }}" alt="qr" style='width: 50%;'>
         </div>
-        <p class="name">{{ user.get_full_name }}</p>
-        <p>{{ user.get_type_user_display }}</p>
-        <p>{{ user.dni }}</p>
+        <p class="name">{{ user_search.get_full_name }}</p>
+        <p>{{ user_search.get_type_user_display }}</p>
+        <p>{{ user_search.dni }}</p>
 
-        {% if user.phone %}
-          <p class="job"><a href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
+        {% if user_search.phone %}
+          <p class="job"><a href="tel:{{ user_search.phone }}">{{ user_search.phone }}</a></p>
         {% endif %}
 
         <div class="social-links">
           <h3>Local</h3>
           <div>
-            {% for e in user.employee.all %}
-              <img src="{{ e.local.logo }}" alt="Profile Image" class="profile-img" width='50'>
+            {% for e in user_search.employee.all %}
+              <img src="{{ e.local.logo.url }}" alt="Profile Image" class="profile-img" width='50'>
             {% endfor %}
           </div>
         </div>

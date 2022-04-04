@@ -42,6 +42,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    class Meta:
+        verbose_name = 'Usuario'
+        verbose_name_plural = 'Usuarios'
+
     def get_short_name(self):
         return self.first_name
 
@@ -60,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            url = 'http://personal.devotoshopping.com.ar/{}'.format(self.dni)
+            url = 'http://personal.devotoshopping.com.ar/dni/{}'.format(self.dni)
             qrcode_img = qrcode.make(url)
             canvas = Image.new("RGB", (400, 400), "white")
             ImageDraw.Draw(canvas)

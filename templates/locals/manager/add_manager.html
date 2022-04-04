@@ -3,6 +3,12 @@
 {% load  static %}
 
 {% block content %}
+<style>
+  .text-error {
+    font-size: .8rem;
+    color: red;
+  }
+</style>
 <section class="mb-4">
   <div class="card">
     <div class="card-header text-center py-3">
@@ -17,7 +23,7 @@
 
         <div class="form-outline mb-4">
           {{ form.dni }}
-          <label for="" class="form-label">{{ form.dni.label }} *</label>
+          <label for="" class="form-label">DNI *</label>
         </div>
 
         <div class="form-outline mb-4">
@@ -27,18 +33,31 @@
 
         <div class="form-outline mb-4">
           {{ form.first_name }}
-          <label for="" class="form-label">{{ form.first_name.label }} *</label>
+          <label for="" class="form-label">Nombre *</label>
         </div>
 
         <div class="form-outline mb-4">
           {{ form.last_name }}
-          <label for="" class="form-label">{{ form.last_name.label }} *</label>
+          <label for="" class="form-label">Apellido *</label>
         </div>
 
         <div class="form-outline mb-4">
           {{ form.phone }}
-          <label for="" class="form-label">{{ form.phone.label }}</label>
+          <label for="" class="form-label">Teléfono</label>
         </div>
+
+        <div class="form-outline mb-4">
+          {{ form.password }}
+          <label for="" class="form-label">Contraseña</label>
+        </div>
+
+        <div class="form-outline mb-4">
+          {{ form.password_again }}
+          <label for="" class="form-label">Confirmar Contraseña</label>
+        </div>
+        {% if form.errors %}
+          <p class="text-error">* Las contraseñas suministradas no coinciden</p>
+        {% endif %}
 
         <div class="form-outline mb-4">
           {{ form.image }}
