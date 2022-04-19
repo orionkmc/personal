@@ -21,12 +21,12 @@
     <header>
       <style>
         #intro {
-          background-color: #b8b6b6;
+          background-image: url(https://devotoshopping.neexcdn.com.ar/wp-content/uploads/2015/11/Background-Home.jpg);
           height: 100vh;
         }
         .card {
           max-width: 300px;
-          margin: 80px auto 0;
+          margin: 50px auto 0;
           background-color: #42515a;
           box-shadow: 0 10px 90px #00000024;
           text-align: center;
@@ -38,10 +38,9 @@
           position: relative;
           height: 48px;
         }
-
         .card .card-header .profile-img {
-          width: 130px;
-          height: 130px;
+          width: 95px;
+          height: 95px;
           border-radius: 1000px;
           position: absolute;
           left: 50%;
@@ -49,7 +48,6 @@
           box-shadow: 0 0 20px #00000033;
           background: #fff;
         }
-
         .card .card-header.vencido .profile-img {
           border: 8px solid rgba(249,49,84,1)!important;
         }
@@ -57,38 +55,34 @@
           border: 8px solid rgba(0,183,74,1)!important;
         }
         .card .card-body {
-          padding: 35px 40px;
+          padding: 25px 30px 5px 30px;
           font-size: 12px;
         }
-
         .card .card-body .name {
-          margin-top: 10px;
-          font-size: 22px;
+          margin-top: 5px;
+          font-size: 16px;
           font-weight: bold;
         }
-
         .card .card-body .mail {
           color: #c2bdbd;
         }
-
         .card .card-body .job {
           margin-top: 10px;
         }
         .card .card-body .job a{
           color: #fff;
         }
-
         .card .social-links {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-top: 10px;
+          margin-top: 5px;
           flex-direction: column;
         }
         .card .card-footer {
           border-bottom-left-radius: 15px;
           border-bottom-right-radius: 15px;
-          padding: 10px 0 10px 0;
+          padding: 5px 0 5px 0;
         }
         .card .card-footer.vencido {
           background-color: rgba(249,49,84,1)!important;
@@ -96,9 +90,12 @@
         .card .card-footer.activo {
           background-color: rgba(0,183,74,1)!important;
         }
-
         .card .card-footer .count {
           font-size: 14px;
+        }
+        .input-group>.form-control {
+          min-height: calc(2.08rem + 3px);
+          height: calc(2.08rem + 3px);
         }
         @media screen and (max-width: 575px) {
           .card {
@@ -112,19 +109,19 @@
       </style>
       <!-- Background image -->
       <div id="intro" class="bg-image shadow-2-strong">
-        <div class="mask">
+        <div class="mask d-flex align-items-center h-100" style="background-color: rgba(0, 0, 0, 0.5);">
           <div class="container">
             <div class="text-center mt-3 mb-3">
-              <img class="img-fluid" src="{% static 'images/Devoto Logo-05.png' %}" alt="devoto">
+              <img style="width: 25%;" src="{% static 'images/Devoto Logo-05.png' %}" alt="devoto">
             </div>
             <div class="row justify-content-center">
-              <div class="col-md-8">
+              <div class="col-md-7">
                 <form method="GET">
                   <div id="custom-search-input">
                     <div class="input-group col-md-12">
                       <input type="text" class="form-control" placeholder="Buscar..." name="search">
                       <span class="input-group-list">
-                        <button type="submit" class="boton btn-success">Buscar</button>
+                        <button type="submit" class="btn btn-success">Buscar</button>
                       </span>
                     </div>
                   </div>
@@ -138,7 +135,7 @@
                     </div>
                     <div class="card-body">
                       <div>
-                        <img src="{{ user_search.qr }}" alt="qr" style='width: 40%;'>
+                        <img src="{{ user_search.qr }}" alt="qr" style='width: 25%;'>
                       </div>
                       <p class="name mb-0">{{ user_search }}</p>
                       <p class="mb-0">{{ user_search.get_type_user_display }}</p>
@@ -151,7 +148,7 @@
                       {% endif %}
               
                       <div class="social-links">
-                        <h5>Local</h5>
+                        <span class="name mt-0">Local</span>
                         <div>
                           {% for e in user_search.employee.all %}
                             <img src="{{ e.local.logo }}" alt="Profile Image" class="profile-img" width='50'>
