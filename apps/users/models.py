@@ -63,9 +63,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.get_full_name()
 
     def save(self, *args, **kwargs):
-        url = 'http://personal.devotoshopping.com.ar/dni/{}'.format(self.dni)
+        # url = 'http://personal.devotoshopping.com.ar/dni/{}'.format(self.dni)
+        url = self.dni
         qrcode_img = qrcode.make(url)
-        canvas = Image.new("RGB", (400, 400), "white")
+        canvas = Image.new("RGB", (300, 300), "white")
         ImageDraw.Draw(canvas)
         canvas.paste(qrcode_img)
         buffer = BytesIO()
