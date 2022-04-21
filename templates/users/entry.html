@@ -97,13 +97,16 @@
           min-height: calc(2.08rem + 3px);
           height: calc(2.08rem + 3px);
         }
+        .search-items {
+          color: #fff;
+        }
         @media screen and (max-width: 575px) {
           .card {
             width: 96%;
           }
 
           .card .card-body {
-            padding: 10px 20px;
+            padding: 20px;
           }
         }
       </style>
@@ -127,7 +130,7 @@
                   </div>
                 </form>
               </div>
-              <div class="col-md-8">
+              <div class="col-md-7">
                 {% if user_search %}
                   <div class="card">
                     <div class="card-header {% if valid %}activo{% else %}vencido{% endif %}">
@@ -165,7 +168,7 @@
                     </div>
                   </div>
                 {% else %}
-                  No hay coincidencias
+                  <p class="search-items">No hay coincidencias</p>
                 {% endif %}
               </div>
             </div>
