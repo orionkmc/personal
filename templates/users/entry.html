@@ -23,24 +23,30 @@
         #intro {
           background-image: url(https://devotoshopping.neexcdn.com.ar/wp-content/uploads/2015/11/Background-Home.jpg);
           height: 100vh;
+          overflow: auto;
+        }
+        .mask {
+          overflow: auto;
         }
         .card {
           max-width: 300px;
-          margin: 50px auto 0;
+          margin: 100px auto 0;
           background-color: #42515a;
           box-shadow: 0 10px 90px #00000024;
           text-align: center;
           font-size: 20px;
           border-radius: 15px;
           color: #fff;
+          margin-bottom: 15px;
         }
         .card .card-header {
           position: relative;
           height: 48px;
+          margin-bottom: .8rem;
         }
         .card .card-header .profile-img {
-          width: 95px;
-          height: 95px;
+          width: 130px;
+          height: 130px;
           border-radius: 1000px;
           position: absolute;
           left: 50%;
@@ -55,12 +61,12 @@
           border: 8px solid rgba(0,183,74,1)!important;
         }
         .card .card-body {
-          padding: 25px 30px 5px 30px;
-          font-size: 12px;
+          padding: 35px 40px;
+          font-size: 16px;
         }
         .card .card-body .name {
           margin-top: 5px;
-          font-size: 16px;
+          font-size: 22px;
           font-weight: bold;
         }
         .card .card-body .mail {
@@ -82,7 +88,7 @@
         .card .card-footer {
           border-bottom-left-radius: 15px;
           border-bottom-right-radius: 15px;
-          padding: 5px 0 5px 0;
+          padding: 20px 0 20px 0;
         }
         .card .card-footer.vencido {
           background-color: rgba(249,49,84,1)!important;
@@ -100,6 +106,9 @@
         .search-items {
           color: #fff;
         }
+        .img-logo {
+          width: 25%;
+        }
         @media screen and (max-width: 575px) {
           .card {
             width: 96%;
@@ -108,14 +117,22 @@
           .card .card-body {
             padding: 20px;
           }
+          .card-header {
+            margin-bottom: 1.3rem;
+          }
+        }
+        @media screen and (max-width: 768px) {
+          .img-logo {
+            width: 50%;
+          }
         }
       </style>
       <!-- Background image -->
       <div id="intro" class="bg-image shadow-2-strong">
-        <div class="mask d-flex align-items-center h-100" style="background-color: rgba(0, 0, 0, 0.5);">
+        <div class="mask h-100" style="background-color: rgba(0, 0, 0, 0.5);">
           <div class="container">
             <div class="text-center mt-3 mb-3">
-              <img style="width: 25%;" src="{% static 'images/Devoto Logo-05.png' %}" alt="devoto">
+              <img class="img-logo" src="{% static 'images/Devoto Logo-05.png' %}" alt="devoto">
             </div>
             <div class="row justify-content-center">
               <div class="col-md-7">
@@ -138,7 +155,7 @@
                     </div>
                     <div class="card-body">
                       <div>
-                        <img src="{{ user_search.qr }}" alt="qr" style='width: 25%;'>
+                        <img src="{{ user_search.qr }}" alt="qr" style='width: 50%;'>
                       </div>
                       <p class="name mb-0">{{ user_search }}</p>
                       <p class="mb-0">{{ user_search.get_type_user_display }}</p>
