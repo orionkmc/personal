@@ -104,6 +104,9 @@ class ManagerForm(forms.Form):
                 'type_user': type_user,
             },
         )
+        if created:
+            user.set_password(data['password'])
+            user.save()
 
         if type_user == 2:
             if created or not Manager.objects.filter(local=Local.objects.get(slug=local), manager=user).exists():
@@ -185,6 +188,24 @@ class EmployeeForm(forms.Form):
 
 
 class ManagerUpdateForm(forms.ModelForm):
+    password_again = forms.CharField(
+        label='Password Again',
+        required=False,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Confirm password',
+                'class': "form-control",
+                'aria-describedby': "passHelp",
+            }
+        )
+    )
+
+    def clean_password_again(self):
+        password = self.cleaned_data['password']
+        password_again = self.cleaned_data['password_again']
+        if password != password_again:
+            raise ValidationError('Passwords do not match')
+        return password_again
 
     class Meta:
         model = User
@@ -222,6 +243,21 @@ class ManagerUpdateForm(forms.ModelForm):
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ManagerUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['password'].required = False
+
+    def _save(self):
+        u = User.objects.get(pk=self.instance.pk)
+        u.email = self.cleaned_data['email']
+        u.first_name = self.cleaned_data['first_name']
+        u.last_name = self.cleaned_data['last_name']
+        u.phone = self.cleaned_data['phone']
+        if len(self.cleaned_data["password"]) > 0:
+            u.set_password(self.cleaned_data["password"])
+        u.save()
+
 class EmployeeUpdateForm(forms.ModelForm):
 
     class Meta:

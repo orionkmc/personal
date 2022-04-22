@@ -9,7 +9,7 @@ from dateutil.relativedelta import relativedelta
 
 
 class Local(models.Model):
-    logo = models.ImageField('logo', upload_to='media/local')
+    logo = models.ImageField('logo', upload_to='media/local', blank=True, null=True)
     name = models.CharField('Nombre', max_length=100)
     slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Dueño')

@@ -1,9 +1,18 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load validate %}
 
 {% block css %}
   <link type="text/css" rel="stylesheet" href=" {% static 'lightgallery/css/lightgallery.min.css' %}" />
+  <style type="text/css">
+    .vencido {
+      color: rgba(249,49,84,1)!important;
+    }
+    .activo {
+      color: rgba(0,183,74,1)!important;
+    }
+  </style>
 {% endblock css %}
 
 {% block content %}
@@ -93,16 +102,17 @@
               <td>Email</td>
               <td>Telefono</td>
               <td>Mes de Vencimiento</td>
-              {% if renovate %}
-                <td>Renovar</td>
-              {% endif %}
+              <td>Renovar</td>
               <td>Editar</td>
-                <td>
-                  Eliminar
-                  <form id="delete_employee" action="" method="POST">
-                    {% csrf_token %}
-                  </form>
-                </td>
+              <td>
+                Eliminar
+                <form id="delete_employee" action="" method="POST">
+                  {% csrf_token %}
+                </form>
+              </td>
+              <td>
+                Compartir
+              </td>
             </tr>
           </thead>
           <tbody>
@@ -123,12 +133,11 @@
                 <td>{{ e.employee.get_full_name }}</td>
                 <td>{{ e.employee.email|default_if_none:"-" }}</td>
                 <td>{{ e.employee.phone|default_if_none:"-" }}</td>
-                <td>{{ e.due_date|date:"F, Y" }}</td>
-                {% if renovate %}
-                  <td><a href="{% url 'locals_app:renovate' local.slug e.pk 2  %}" class="btn btn-success px-3"><i class="fa-solid fa-arrows-rotate"></i></a></td>
-                {% endif %}
+                <td><strong class="{% validate e.employee %}">{{ e.due_date|date:"F, Y" }}</strong></td>
+                <td><a href="{% url 'locals_app:renovate' local.slug e.pk 2  %}" class="btn btn-success px-3"><i class="fa-solid fa-arrows-rotate"></i></a></td>
                 <td><a class="btn btn-warning px-3" href="{% url 'locals_app:employee-update' local.slug e.employee.pk %} "><i class="fas fa-edit"></i></a></td>
                 <td><button class="btn btn-danger px-3" onclick="DeleteManager('{% url "locals_app:employee-delete" local.slug e.pk %}', '#delete_employee')"><i class="fa-solid fa-trash"></i></button></td>
+                <td><a href="https://api.whatsapp.com/send?text=https://personal.devotoshopping.com.ar/dni/{{e.employee.dni}}" target="_blank" class="btn btn-info px-3"><i class="fa-solid fa-share"></i></a></td>
               </tr>
             {% endfor %}
           </tbody>

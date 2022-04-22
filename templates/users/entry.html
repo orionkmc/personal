@@ -151,7 +151,11 @@
                 {% if user_search %}
                   <div class="card">
                     <div class="card-header {% if valid %}activo{% else %}vencido{% endif %}">
-                      <img src="{{ user_search.image }}" alt="Profile Image" class="profile-img">
+                      {% if user_search.image %}
+                        <img src="{{ user_search.image }}" alt="Profile Image" class="profile-img">
+                      {% else %}
+                        <img src="{% static 'images/user.png' %}" alt="Profile Image" class="profile-img">
+                      {% endif %}
                     </div>
                     <div class="card-body">
                       <div>
@@ -171,7 +175,11 @@
                         <span class="name mt-0">Local</span>
                         <div>
                           {% for e in user_search.employee.all %}
-                            <img src="{{ e.local.logo }}" alt="Profile Image" class="profile-img" width='50'>
+                            {% if e.local.logo %}
+                              <img src="{{ e.local.logo }}" alt="Profile Image" class="profile-img" width='50'>
+                            {% else %}
+                              <li>{{ e.local.name }}</li>
+                            {% endif %}
                           {% endfor %}
                         </div>
                       </div>

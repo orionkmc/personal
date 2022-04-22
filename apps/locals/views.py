@@ -16,6 +16,7 @@ import datetime
 # from datetime import date
 
 
+# Function
 def local_(user):
     if user.type_user == '1':
         return Local.objects.filter(owner=user)
@@ -23,14 +24,24 @@ def local_(user):
         return Local.objects.filter(manager__manager=user)
 
 
+def is_your_local(user, local):
+    if user.type_user == '1':
+        exist = Local.objects.filter(name=local, owner=user).exists()
+    elif user.type_user == '2':
+        exist = Local.objects.filter(name=local, manager__manager=user).exists()
+    return exist
+
+
 def card(dni):
     context = {}
     try:
         user = User.objects.get(dni=dni)
+        context['valid'] = False
 
         a = datetime.date.today()
         # a = datetime.datetime(2022, 4, 1)
-        if user.type_user == 3:
+
+        if user.type_user == '3':
             for x in user.employee.all():
                 if x.due_date.strftime("%Y-%m-%d") >= a.strftime("%Y-%m-%d"):
                     context['valid'] = True
@@ -45,6 +56,7 @@ def card(dni):
     return context
 
 
+# views
 class SearchView(View):
     def get(self, request, *args, **kargs):
         context = {}
@@ -62,30 +74,33 @@ class UserView(View):
 class PanelView(LoginRequiredMixin, View):
     def get(self, request, local, *args, **kwargs):
         local = Local.objects.get(slug=local)
-        if not request.user.dni == local.owner.dni:
+        if not is_your_local(request.user, local):
             return redirect('users_app:user-login')
-        a = datetime.date.today() + relativedelta(day=31)
-        b = datetime.date.today()
-        # a = datetime.datetime(2022, 3, 29) + relativedelta(day=31)
-        # b = datetime.datetime(2022, 3, 29)
-        c = a - b
-        if c.days < 3:
-            renovate = True
-        else:
-            renovate = False
+
+        # a = datetime.date.today() + relativedelta(day=31)
+        # b = datetime.date.today()
+        # # a = datetime.datetime(2022, 3, 29) + relativedelta(day=31)
+        # # b = datetime.datetime(2022, 3, 29)
+        # c = a - b
+        # if c.days < 3:
+        #     renovate = True
+        # else:
+        #     renovate = False
         return render(request, 'locals/list.html', {
             'locals': local_(self.request.user),
             'local': local,
-            'renovate': renovate,
+            # 'renovate': renovate,
         })
 
 
+# Manager
 class ManagerCreateView(View):
     def get(self, request, local, *args, **kwargs):
         return render(request, 'locals/manager/add_manager.html', {
             'form': ManagerForm(),
             'local': Local.objects.get(slug=local),
             'locals': local_(request.user),
+            'manager': True,
         })
 
     def post(self, request, local, *args, **kwargs):
@@ -99,6 +114,7 @@ class ManagerCreateView(View):
             'form': form,
             'local': Local.objects.get(slug=local),
             'locals': local_(request.user),
+            'manager': True,
         })
 
 
@@ -108,18 +124,21 @@ class ManagerUpdateView(View):
             'form': ManagerUpdateForm(instance=User.objects.get(pk=pk)),
             'local': Local.objects.get(slug=local),
             'locals': local_(request.user),
+            'manager': True,
         })
 
     def post(self, request, local, pk, *args, **kwargs):
         form = ManagerUpdateForm(request.POST, request.FILES, instance=User.objects.get(pk=pk))
         if form.is_valid():
-            form.save()
+            form._save()
+            # print(form.cleaned_data)
             messages.add_message(request, messages.SUCCESS, 'Gerente editado')
             return redirect('locals_app:panel', local=local)
         return render(request, 'locals/manager/add_manager.html', {
             'form': form,
             'local': Local.objects.get(slug=local),
             'locals': local_(request.user),
+            'manager': True,
         })
 
 
@@ -182,6 +201,7 @@ class EmployeeDeleteView(LoginRequiredMixin, View):
         return redirect('locals_app:panel', local=local)
 
 
+# api
 class RenovateView(LoginRequiredMixin, View):
     def get(self, request, local, pk, days, *args, **kwargs):
         e = Employee.objects.filter(pk=pk)
