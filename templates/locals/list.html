@@ -60,6 +60,9 @@
                     {% csrf_token %}
                   </form>
                 </td>
+                <td>
+                  Compartir
+                </td>
               {% endif %}
             </tr>
           </thead>
@@ -82,7 +85,8 @@
                 <td>{{ m.manager.phone|default_if_none:"-" }}</td>
                 {% if user.type_user == '1' %}
                 <td><a class="btn btn-warning px-3" href="{% url 'locals_app:manager-update' local.slug m.manager.pk %} "><i class="fas fa-edit"></i></a></td>
-                  <td><button class="btn btn-danger px-3" onclick="DeleteManager('{% url "locals_app:manager-delete" local.slug m.pk %}', '#delete_manager')"><i class="fa-solid fa-trash"></i></button></td>
+                <td><button class="btn btn-danger px-3" onclick="DeleteManager('{% url "locals_app:manager-delete" local.slug m.pk %}', '#delete_manager')"><i class="fa-solid fa-trash"></i></button></td>
+                <td><a href="https://api.whatsapp.com/send?text=https://personal.devotoshopping.com.ar/dni/{{m.manager.dni}}" target="_blank" class="btn btn-info px-3"><i class="fa-solid fa-share"></i></a></td>
                 {% endif %}
               </tr>
             {% endfor %}

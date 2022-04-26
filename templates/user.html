@@ -163,9 +163,15 @@
         <div class="social-links">
           <h3>Local</h3>
           <div>
-            {% for e in user_search.employee.all %}
-              <img src="{{ e.local.logo.url }}" alt="Profile Image" class="profile-img" width='50'>
-            {% endfor %}
+            {% if user.type_user == '2' %}
+              {% for e in user_search.manager.all %}
+                <img src="{{ e.local.logo.url }}" alt="Profile Image" class="profile-img" width='50'>
+              {% endfor %}
+            {% elif user.type_user == '3' %}
+              {% for e in user_search.employee.all %}
+                <img src="{{ e.local.logo.url }}" alt="Profile Image" class="profile-img" width='50'>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
       </div>
