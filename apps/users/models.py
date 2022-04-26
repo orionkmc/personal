@@ -27,7 +27,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField('Nombres', max_length=100)
     last_name = models.CharField('Apellidos', max_length=100)
     phone = models.CharField('Telefono', max_length=100, help_text="809-472-2626", blank=True, null=True)
-    image = models.ImageField('foto', upload_to='media/user/employees')
+    image = models.ImageField('foto', upload_to='media/user/employees', blank=True, null=True)
     qr = models.ImageField(upload_to='media/user/qrcode', blank=True)
 
     #
