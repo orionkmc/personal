@@ -40,9 +40,11 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = []
+
 LOCAL_APPS = [
     'apps.users',
     'apps.locals',
+    'apps.sales',
 ]
 
 
@@ -63,7 +65,7 @@ ROOT_URLCONF = 'personal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'dist'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,6 +136,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+    BASE_DIR / "dist/static",
 ]
 
 # Default primary key field type
