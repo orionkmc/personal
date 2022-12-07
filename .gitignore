@@ -103,6 +103,7 @@ static/admin/**
 # Migraciones
 apps/locals/migrations/*
 apps/users/migrations/*
+apps/sales/migrations/*
 
 # confuguracion
 personal/settings/local.py
