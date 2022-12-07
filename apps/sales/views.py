@@ -39,11 +39,12 @@ class MonthSale(LoginRequiredMixin, View):
         local = Local.objects.get(slug=local)
         if not is_your_local(request.user, local):
             return redirect('users_app:user-login')
+
         today = datetime.datetime.today()
+        if datetime.datetime(year, month, 1) > today:
+            return redirect('sales_app:resumen_sales', local=local.slug, month=today.month, year=today.year)
 
         s = Sales.objects.filter(local=local, date__month=month, date__year=year)
-        d_max = Sales.objects.aggregate(Max('date'))
-        d_min = Sales.objects.aggregate(Min('date'))
 
         if s.exists():
             total_valor_venta = s.aggregate(Sum('sale_value'))
@@ -54,6 +55,9 @@ class MonthSale(LoginRequiredMixin, View):
             total_pxt = t_c_u['quantity_units__sum'] / t_c_t['quantity_tickets__sum']
             total_precio_promedio = total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum']
             total_ticket_promedio = total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum']
+
+            d_max = Sales.objects.aggregate(Max('date'))
+            d_min = Sales.objects.aggregate(Min('date'))
         else:
             total_valor_venta = {'sale_value__sum': 0}
             t_c_u = {'quantity_units__sum': 0}
@@ -64,12 +68,18 @@ class MonthSale(LoginRequiredMixin, View):
             total_precio_promedio = 0
             total_ticket_promedio = 0
 
+            d_max = {'date__max': today}
+            d_min = {'date__min': today}
+
         return render(request, 'sales/list.html', {
             'locals': local_(self.request.user),
             'local': local,
             'month': month,
             'current_month': today.month,
-            'months': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            'months': [
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
+                'Noviembre', 'Diciembre'
+            ],
             'year': year,
             'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
             'month_name': months[month - 1],
