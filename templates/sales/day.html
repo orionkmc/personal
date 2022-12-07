@@ -13,7 +13,7 @@
       {% for d in days %}
           {% if d <= today.day %}
             <a
-              href="{% url 'sales_app:day_sales' 'vica-barca' d month year %}"
+              href="{% url 'sales_app:day_sales' local.slug d month year %}"
               class="flex justify-center items-center mt-2 rounded-md border border-transparent h-10 w-10 text-sm font-semibold text-white {% days_locked local.slug forloop.counter month year day %}"
             >{{ d }}</a>
           {% else %}
@@ -132,7 +132,7 @@
         </div>
 
         <div class="flex justify-center py-5">
-          <a href="{% url 'sales_app:resumen_sales' 'vica-barca' month year %}" class="inline-block mt-2 mr-2 rounded-md border border-transparent bg-blue-500 py-2 px-8 text-center text-sm font-semibold text-white hover:bg-blue-600">Atras</a>
+          <a href="{% url 'sales_app:resumen_sales' local.slug month year %}" class="inline-block mt-2 mr-2 rounded-md border border-transparent bg-blue-500 py-2 px-8 text-center text-sm font-semibold text-white hover:bg-blue-600">Atras</a>
           {% if not exist or sale.0.can_edit %}
             <form action="" method="POST" id="sale_day_form">
               {% csrf_token %}

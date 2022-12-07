@@ -9,7 +9,7 @@
 {% block content %}
   <div class="">
     {% for y in years %}
-      <a href="{% url 'sales_app:resumen_sales' 'vica-barca' 1 y %}" class="inline-block mt-2 rounded-md py-2 px-8 text-center text-sm font-semibold border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 {% if y == year %}bg-black !text-white{% endif %}">{{ y }}</a>
+      <a href="{% url 'sales_app:resumen_sales' local.slug 1 y %}" class="inline-block mt-2 rounded-md py-2 px-8 text-center text-sm font-semibold border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 {% if y == year %}bg-black !text-white{% endif %}">{{ y }}</a>
     {% endfor %}
     <br>
     <br>
@@ -18,7 +18,7 @@
     {% for m in months %}
       {% valid_date forloop.counter year as valid_date_tag %}
       {% if valid_date_tag %}
-        <a href="{% url 'sales_app:resumen_sales' 'vica-barca' forloop.counter year %}" class="w-28 inline-block mt-2 rounded-md border border-transparent py-2 text-center text-sm font-semibold text-white {% months_locked local.slug forloop.counter year month %}">{{ m }}</a>
+        <a href="{% url 'sales_app:resumen_sales' local.slug forloop.counter year %}" class="w-28 inline-block mt-2 rounded-md border border-transparent py-2 text-center text-sm font-semibold text-white {% months_locked local.slug forloop.counter year month %}">{{ m }}</a>
       {% else %}
         <a href="javascript:void(0)" class="w-28 inline-block mt-2 rounded-md border border-transparent py-2 text-center text-sm font-semibold text-white cursor-not-allowed bg-cyan-400">{{ m }}</a>
       {% endif %}
@@ -96,7 +96,7 @@
           </div>
         </dl>
         <div class="flex justify-center py-5">
-          <a href="{% url 'sales_app:day_sales' 'vica-barca' 1 month year %}" class="inline-block mt-2 rounded-md border border-transparent bg-green-500 py-2 px-8 text-center text-sm font-semibold text-white hover:bg-green-600">Modificar Dias</a>
+          <a href="{% url 'sales_app:day_sales' local.slug 1 month year %}" class="inline-block mt-2 rounded-md border border-transparent bg-green-500 py-2 px-8 text-center text-sm font-semibold text-white hover:bg-green-600">Modificar Dias</a>
         </div>
       </div>
     </div>
