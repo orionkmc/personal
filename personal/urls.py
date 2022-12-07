@@ -9,6 +9,6 @@ urlpatterns = [
     # users app
     re_path('', include('apps.users.urls')),
     re_path('', include('apps.locals.urls')),
-    re_path('ventas', include('apps.sales.urls')),
+    re_path('', include('apps.sales.urls')),
     re_path(r'^kuai/(.*)$', TemplateView.as_view(template_name='index.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

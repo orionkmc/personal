@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+
+{% load static %}
+{% load sales_tag %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+  <div class="">
+    <h1 class="text-center text-bold">{{ month_name }} {{ year }}</h1>
+    <div class="flex flex-wrap gap-1">
+      {% for d in days %}
+          {% if d <= today.day %}
+            <a
+              href="{% url 'sales_app:day_sales' 'vica-barca' d month year %}"
+              class="flex justify-center items-center mt-2 rounded-md border border-transparent h-10 w-10 text-sm font-semibold text-white {% days_locked local.slug forloop.counter month year day %}"
+            >{{ d }}</a>
+          {% else %}
+            <a
+              href="javascript:void(0)"
+              class="flex justify-center cursor-not-allowed items-center mt-2 rounded-md border border-transparent h-10 w-10 text-sm font-semibold text-white bg-cyan-400"
+            >{{ d }}</a>
+          {% endif %}
+      {% endfor %}
+    </div>
+
+    <br>
+    <br>
+    <div class="overflow-hidden shadow sm:rounded-lg">
+      <div class="flex justify-between px-4 py-5 sm:px-6 {% if not exist or sale.0.can_edit %}bg-green-500 {% else %}bg-red-500 {% endif %}text-gray-50">
+        <span>{{ month_name }} {{ year }}</span>
+        <span>
+          Estado: <span class="font-bold">{% if not exist or sale.0.can_edit %}Activo{% else %}Bloqueado{% endif %}</span>
+        </span>
+      </div>
+
+      <div class="border-t border-gray-200 bg-gray-100">
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">Dia {{ day }}</h3>
+        </div>
+
+        <div>
+          <div class="bg-gray-50 px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">
+            <div class="flex items-center w-64 justify-end mr-3 font-bold">
+              Valor Venta
+            </div>
+
+            {% if not exist or sale.0.can_edit %}
+              {{ sales_form.sale_value }}
+            {% else %}
+              {{ sale.0.sale_value|floatformat }}
+            {% endif %}
+          </div>
+
+          <div class="bg-white px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">
+            <div class="flex items-center w-64 justify-end mr-3 font-bold">
+              Cantidad de Unidades
+            </div>
+            {% if not exist or sale.0.can_edit %}
+              {{ sales_form.quantity_units }}
+            {% else %}
+              {{ sale.0.quantity_units|floatformat }}
+            {% endif %}
+          </div>
+
+          <div class="bg-gray-50 px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">
+            <div class="flex items-center w-64 justify-end mr-3 font-bold">
+              Cantidad de Tickets
+            </div>
+
+            {% if not exist or sale.0.can_edit %}
+              {{ sales_form.quantity_tickets }}
+            {% else %}
+              {{ sale.0.quantity_tickets|floatformat }}
+            {% endif %}
+          </div>
+
+          <div class="bg-white px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">
+            <div class="flex items-center w-64 justify-end mr-3 font-bold">
+              Valor NC
+            </div>
+            {% if not exist or sale.0.can_edit %}
+              {{ sales_form.nc_value }}
+            {% else %}
+              {{ sale.0.nc_value|floatformat }}
+            {% endif %}
+          </div>
+
+
+          <div class="bg-gray-50 px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">
+            <div class="flex items-center shrink-0 w-64 justify-end mr-3 font-bold">
+              Observaciones
+            </div>
+
+            {% if not exist or sale.0.can_edit %}
+              {{ sales_form.observations }}
+            {% else %}
+              <div class="">{{ sale.0.observations }}</div>
+            {% endif %}
+          </div>
+
+
+          <div class="bg-white px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">            
+            <div class="flex items-center w-64 justify-end mr-3 font-bold">
+              Total con NC
+            </div>
+            {% if exist %} {{ sale.0.total_nc|floatformat:-2 }} {% else %} 0 {% endif %}
+          </div>
+
+          <div class="bg-gray-50 px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">
+            <div class="flex items-center w-64 justify-end mr-3 font-bold">
+              PXT
+            </div>
+            {% if exist %} {{ sale.0.pxt|floatformat:-2 }} {% else %} 0 {% endif %}
+          </div>
+
+          <div class="bg-white px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">
+            <div class="flex items-center w-64 justify-end mr-3 font-bold">
+              Precio Promedio
+            </div>
+            {% if exist %} {{ sale.0.precio_promedio|floatformat:-2 }} {% else %} 0 {% endif %}
+          </div>
+
+          <div class="bg-gray-50 px-4 py-2 flex mt-1 text-sm text-gray-900 sm:mt-0">
+            <div class="flex items-center w-64 justify-end mr-3 font-bold">
+              Ticket Promedio
+            </div>
+            <span>{% if exist %} {{ sale.0.ticket_promedio|floatformat:-2 }} {% else %} 0 {% endif %}</span>
+          </div>
+
+        </div>
+
+        <div class="flex justify-center py-5">
+          <a href="{% url 'sales_app:resumen_sales' 'vica-barca' month year %}" class="inline-block mt-2 mr-2 rounded-md border border-transparent bg-blue-500 py-2 px-8 text-center text-sm font-semibold text-white hover:bg-blue-600">Atras</a>
+          {% if not exist or sale.0.can_edit %}
+            <form action="" method="POST" id="sale_day_form">
+              {% csrf_token %}
+              <button type="submit" class="inline-block mt-2 rounded-md border border-transparent bg-green-500 py-2 px-8 text-center text-sm font-semibold text-white hover:bg-green-600">Modificar</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <br>
+{% endblock content %}
+
+{% block js %}{% endblock js %}

@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% load static %}
+{% load sales_tag %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+  <div class="">
+    {% for y in years %}
+      <a href="{% url 'sales_app:resumen_sales' 'vica-barca' 1 y %}" class="inline-block mt-2 rounded-md border border-transparent bg-indigo-600 py-2 px-8 text-center text-sm font-semibold text-white hover:bg-indigo-700">{{ y }}</a>
+    {% endfor %}
+    <br>
+    <br>
+    <hr>
+    <br>
+    {% for m in months %}
+      {% if forloop.counter <= current_month %}
+        <a href="{% url 'sales_app:resumen_sales' 'vica-barca' forloop.counter year %}" class="w-28 inline-block mt-2 rounded-md border border-transparent py-2 text-center text-sm font-semibold text-white {% months_locked local.slug forloop.counter year %}">{{ m }}</a>
+      {% else %}
+        <a href="javascript:void(0)" class="w-28 inline-block mt-2 rounded-md border border-transparent py-2 text-center text-sm font-semibold text-white cursor-not-allowed bg-cyan-400">{{ m }}</a>
+      {% endif %}
+    {% endfor %}
+
+    <br>
+    <br>
+    <div class="overflow-hidden shadow sm:rounded-lg">
+      <div class="flex justify-between px-4 py-5 sm:px-6 bg-green-500 text-gray-50">
+        <span>{{ month_name }} {{ year }}</span>
+        <span>Estado: Activo</span>
+      </div>
+
+      <div class="border-t border-gray-200 bg-gray-100">
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">Resumen</h3>
+          <p class="mt-1 max-w-2xl text-sm text-gray-500">Mensual</p>
+        </div>
+        <dl>
+          <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dd class="flex mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Total Valor Venta = {{ total_valor_venta|floatformat:-2 }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dd class="flex mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Total Cantidad Unidades = {{ total_cantidad_unidades|floatformat:-2 }}
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dd class="flex mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Total Cantidad Tickets = {{ total_cantidad_tickets|floatformat:-2 }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dd class="flex mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Total Valor NC = {{ total_valor_nc|floatformat:-2}}
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dd class="flex mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Total PXT = {{ total_pxt|floatformat:-2 }}
+            </dd>
+          </div>
+          <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dd class="flex mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Total Precio Promedio = {{ total_precio_promedio|floatformat:-2 }}
+            </dd>
+          </div>
+          <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dd class="flex mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Total Ticket Promedio = {{ total_ticket_promedio|floatformat:-2 }}
+            </dd>
+          </div>
+        </dl>
+        <div class="flex justify-center py-5">
+          <a href="{% url 'sales_app:day_sales' 'vica-barca' 1 month year %}" class="inline-block mt-2 rounded-md border border-transparent bg-green-500 py-2 px-8 text-center text-sm font-semibold text-white hover:bg-green-600">Modificar Dias</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}
+{% endblock js %}

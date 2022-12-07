@@ -6,5 +6,6 @@ from . import views
 app_name = "sales_app"
 
 urlpatterns = [
-    path('', views.SalesView.as_view(), name='sales'),
+    path('ventas/<str:local>/<int:month>/<int:year>', views.MonthSale.as_view(), name='resumen_sales'),
+    path('ventas/<str:local>/<int:day>/<int:month>/<int:year>', views.DaySale.as_view(), name='day_sales'),
 ]

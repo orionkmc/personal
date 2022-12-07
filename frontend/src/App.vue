@@ -1,9 +1,3 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from "./components/HelloWorld.vue";
-</script>
-
 <template>
   <div>
     <a href="https://vitejs.dev" target="_blank">
@@ -13,8 +7,36 @@ import HelloWorld from "./components/HelloWorld.vue";
       <img src="./dist/static/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+  <!-- <HelloWorld msg="Vite + Vue" /> -->
+
+  <div>
+    <h3 class="text-lg font-medium leading-6 text-gray-900">Last 30 days</h3>
+    <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+      <div
+        v-for="item in stats"
+        :key="item.name"
+        class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+      >
+        <dt class="truncate text-sm font-medium text-gray-500">
+          {{ item.name }}
+        </dt>
+        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+          {{ item.stat }}
+        </dd>
+      </div>
+    </dl>
+  </div>
 </template>
+
+<script setup>
+// import HelloWorld from "./components/HelloWorld.vue";
+
+const stats = [
+  { name: "Total Subscribers", stat: "71,897" },
+  { name: "Avg. Open Rate", stat: "58.16%" },
+  { name: "Avg. Click Rate", stat: "24.57%" },
+];
+</script>
 
 <style scoped>
 .logo {

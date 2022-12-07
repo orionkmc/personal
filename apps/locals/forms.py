@@ -111,7 +111,7 @@ class ManagerForm(forms.Form):
         if type_user == 2:
             if created or not Manager.objects.filter(local=Local.objects.get(slug=local), manager=user).exists():
                 Manager.objects.create(local=Local.objects.get(slug=local), manager=user)
-                
+
 
 class EmployeeForm(forms.Form):
     dni = forms.CharField(
@@ -257,6 +257,7 @@ class ManagerUpdateForm(forms.ModelForm):
         if len(self.cleaned_data["password"]) > 0:
             u.set_password(self.cleaned_data["password"])
         u.save()
+
 
 class EmployeeUpdateForm(forms.ModelForm):
 
