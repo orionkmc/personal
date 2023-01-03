@@ -1,0 +1,162 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+  <div class="lg:flex lg:h-full lg:flex-col">
+    <header class="flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none">
+      <h1 class="text-lg font-semibold text-gray-900">
+        <time datetime="2022-01">{{ local.name }} {{month_name}} {{year}}</time>
+      </h1>
+      <div class="flex items-center">
+        <div class="flex items-center md:ml-4 rounded-md">
+          <button type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">Excel</button>
+        </div>
+
+        <div class="flex items-center md:ml-4 rounded-md">
+          <button type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">Bloquear mes</button>
+        </div>
+
+        <div class="hidden md:ml-4 md:flex md:items-center">
+          <div class="relative">
+          <button id="month" type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">
+            {{ month_name }}
+            <!-- Heroicon name: mini/chevron-down -->
+            <svg class="ml-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <div id="months" class="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+            <div class="py-1" role="none">
+              {% for m in months %}
+                <a
+                  href="{% url 'sales_app:r_sales_su' local.slug forloop.counter year %}"
+                  class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 {% if forloop.counter == month %}bg-gray-100 text-gray-900{% else %}text-gray-700{% endif %}"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                >{{ m }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden md:ml-4 md:flex md:items-center">
+          <div class="relative">
+          <button id="year" type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">
+            {{ year }}
+            <!-- Heroicon name: mini/chevron-down -->
+            <svg class="ml-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          <div id="years" class="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+            <div class="py-1" role="none">
+              {% for y in years %}
+                <a
+                  href="{% url 'sales_app:r_sales_su' local.slug 1 y %}"
+                  class="block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 {% if y == year %}bg-gray-100 text-gray-900{% else %}text-gray-700{% endif %}"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="menu-item-0"
+                >{{ y }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+      <!--
+      <div class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
+        <div class="flex justify-center bg-white py-2">
+          <span>M</span>
+          <span class="sr-only sm:not-sr-only">on</span>
+        </div>
+        <div class="flex justify-center bg-white py-2">
+          <span>T</span>
+          <span class="sr-only sm:not-sr-only">ue</span>
+        </div>
+        <div class="flex justify-center bg-white py-2">
+          <span>W</span>
+          <span class="sr-only sm:not-sr-only">ed</span>
+        </div>
+        <div class="flex justify-center bg-white py-2">
+          <span>T</span>
+          <span class="sr-only sm:not-sr-only">hu</span>
+        </div>
+        <div class="flex justify-center bg-white py-2">
+          <span>F</span>
+          <span class="sr-only sm:not-sr-only">ri</span>
+        </div>
+        <div class="flex justify-center bg-white py-2">
+          <span>S</span>
+          <span class="sr-only sm:not-sr-only">at</span>
+        </div>
+        <div class="flex justify-center bg-white py-2">
+          <span>S</span>
+          <span class="sr-only sm:not-sr-only">un</span>
+        </div>
+      </div>
+      -->
+      <div class="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
+        <div class="w-full grid grid-cols-6 grid-rows-5 {% if days|length > 28 %}!grid-rows-6{% endif %} gap-px">
+          {% for d in days %}
+            <div class="relative flex justify-between bg-white py-2 px-3 h-24">
+              {% if false %}
+                <span class="font-semibold"><time datetime="2022-01-01" class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">{{ d.day }}</time></span>
+              {% else %}
+                <span class="font-semibold"><time datetime="{{ year }}-{{ month }}-{{ d.day }}">{{ d.day }}</time></span>
+              {% endif %}
+              <div class="flex justify-between flex-col">
+                <span>{{ d.sale_value }}</span>
+                <span>{{ d.quantity_tickets }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}
+<script>
+  let open_m = false
+  let open_y = false
+  let month = document.getElementById("month");
+  let months = document.getElementById("months");
+
+  let year = document.getElementById("year");
+  let years = document.getElementById("years");
+
+  month.addEventListener("click", () => {
+    if (open_m) {
+      months.classList.remove("block");
+      months.classList.add("hidden");
+      open_m = false
+    } else {
+      months.classList.remove("hidden");
+      months.classList.add("block");
+      open_m = true
+    }
+  });
+
+  year.addEventListener("click", () => {
+    if (open_y) {
+      years.classList.remove("block");
+      years.classList.add("hidden");
+      open_y = false
+    } else {
+      years.classList.remove("hidden");
+      years.classList.add("block");
+      open_y = true
+    }
+  });
+</script>
+{% endblock js %}

@@ -153,3 +153,48 @@ class DaySale(LoginRequiredMixin, View):
                 )
 
         return redirect('sales_app:day_sales', local=local, day=day, month=month, year=year)
+
+
+class PanelSu(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'sales/admin/panel.html', {
+            'locals': Local.objects.all(),
+            'today': datetime.datetime.today()
+        })
+
+
+class MonthSaleSu(LoginRequiredMixin, View):
+    def get(self, request, local, month, year, *args, **kwargs):
+        today = datetime.datetime.today()
+        days = []
+        test_date = datetime.datetime(year, month, 1)
+        days_month = list(range(1, int(calendar.monthrange(test_date.year, test_date.month)[1]) + 1))
+        for d in days_month:
+            try:
+                s = Sales.objects.get(local__slug=local, date__day=d, date__month=month, date__year=year)
+                days.append({
+                    'day': d,
+                    'sale_value': s.sale_value,
+                    'quantity_tickets': s.quantity_tickets,
+                })
+            except:
+                days.append({
+                    'day': d,
+                    'sale_value': 0,
+                    'quantity_tickets': 0,
+                })
+
+        d_max = Sales.objects.aggregate(Max('date'))
+        d_min = Sales.objects.aggregate(Min('date'))
+
+        return render(request, 'sales/admin/list.html', {
+            'local': Local.objects.get(slug=local),
+            'locals': Local.objects.all(),
+            'today': today,
+            'days': days,
+            'month': month,
+            'months': months,
+            'month_name': months[month - 1],
+            'year': year,
+            'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
+        })

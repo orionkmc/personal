@@ -11,7 +11,7 @@ class Sales(models.Model):
     quantity_units = models.FloatField(verbose_name='Cantidad Unidades')
     quantity_tickets = models.FloatField(verbose_name='Cantidad Tickets')
     nc_value = models.FloatField(verbose_name='Valor NC')
-    observations = models.TextField(verbose_name='Observaciones')
+    observations = models.TextField(verbose_name='Observaciones', null=True, blank=True)
 
     @property
     def total_nc(self):
