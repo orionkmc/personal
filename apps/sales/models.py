@@ -16,27 +16,33 @@ class Sales(models.Model):
     @property
     def total_nc(self):
         try:
-          return self.sale_value - self.nc_value
+            return self.sale_value - self.nc_value
         except ZeroDivisionError:
-          return 0
+            return 0
 
     @property
     def pxt(self):
         try:
-          return self.quantity_units / self.quantity_tickets
+            return self.quantity_units / self.quantity_tickets
         except ZeroDivisionError:
-          return 0
+            return 0
 
     @property
     def precio_promedio(self):
         try:
-          return self.sale_value / self.quantity_units
+            return self.sale_value / self.quantity_units
         except ZeroDivisionError:
-          return 0
+            return 0
 
     @property
     def ticket_promedio(self):
         try:
-          return self.sale_value / self.quantity_tickets
+            return self.sale_value / self.quantity_tickets
         except ZeroDivisionError:
-          return 0
+            return 0
+
+
+class ExcelSales(models.Model):
+    local = models.ForeignKey(Local, on_delete=models.CASCADE, verbose_name='Local', related_name='exel')
+    date = models.DateField(verbose_name='Fecha')
+    url = models.CharField('Excel', max_length=255)

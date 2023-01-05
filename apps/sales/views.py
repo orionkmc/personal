@@ -4,11 +4,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.db.models import Sum
 from django.db.models import Max, Min
+from django.conf import settings
 
 from apps.locals.models import Local
-from apps.sales.models import Sales
+from apps.sales.models import Sales, ExcelSales
 from apps.sales.forms import SalesForm
 
+from openpyxl import Workbook
 import datetime
 import calendar
 months = (
@@ -53,19 +55,19 @@ class MonthSale(LoginRequiredMixin, View):
             total_valor_nc = s.aggregate(Sum('nc_value'))
 
             try:
-              total_pxt = t_c_u['quantity_units__sum'] / t_c_t['quantity_tickets__sum']
+                total_pxt = t_c_u['quantity_units__sum'] / t_c_t['quantity_tickets__sum']
             except ZeroDivisionError:
-              total_pxt = 0
+                total_pxt = 0
 
             try:
-              total_precio_promedio = total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum']
+                total_precio_promedio = total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum']
             except ZeroDivisionError:
-              total_precio_promedio = 0
+                total_precio_promedio = 0
 
             try:
-              total_ticket_promedio = total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum']
+                total_ticket_promedio = total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum']
             except ZeroDivisionError:
-              total_ticket_promedio = 0
+                total_ticket_promedio = 0
 
             d_max = Sales.objects.aggregate(Max('date'))
             d_min = Sales.objects.aggregate(Min('date'))
@@ -124,10 +126,8 @@ class DaySale(LoginRequiredMixin, View):
         else:
             sales_form = SalesForm()
 
-        test_date = datetime.datetime(year, month, day)
-
         num_days = calendar.monthrange(year, month)[1]
-        days = [datetime.date(year, month, day) for day in range(1, num_days+1)]
+        days = [datetime.date(year, month, d) for d in range(1, num_days + 1)]
 
         return render(request, 'sales/day.html', {
             'locals': local_(self.request.user),
@@ -184,6 +184,18 @@ class MonthSaleSu(LoginRequiredMixin, View):
         days = []
         test_date = datetime.datetime(year, month, 1)
         days_month = list(range(1, int(calendar.monthrange(test_date.year, test_date.month)[1]) + 1))
+        try:
+            es = ExcelSales.objects.get(local__slug=local, date__month=month, date__year=year)
+            excel = {
+                'is_excel': True,
+                'es': es
+            }
+        except:
+            excel = {
+                'is_excel': False,
+                'es': ''
+            }
+
         for d in days_month:
             try:
                 s = Sales.objects.get(local__slug=local, date__day=d, date__month=month, date__year=year)
@@ -213,6 +225,7 @@ class MonthSaleSu(LoginRequiredMixin, View):
             'months': months,
             'month_name': months[month - 1],
             'year': year,
+            'excel': excel,
             'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
         })
 
@@ -220,7 +233,7 @@ class MonthSaleSu(LoginRequiredMixin, View):
 class LockMonthSu(LoginRequiredMixin, View):
     def post(self, request, local, month, year, *args, **kwargs):
         num_days = calendar.monthrange(year, month)[1]
-        days = [datetime.date(year, month, day) for day in range(1, num_days+1)]
+        days = [datetime.date(year, month, day) for day in range(1, num_days + 1)]
 
         for d in days:
             try:
@@ -247,10 +260,52 @@ class LockMonthSu(LoginRequiredMixin, View):
 
 class UnlockMonthSu(LoginRequiredMixin, View):
     def post(self, request, local, month, year, *args, **kwargs):
-        s = Sales.objects.filter(
+        Sales.objects.filter(
             local__slug=local,
             date__month=month,
             date__year=year
         ).update(can_edit=True)
 
+        return redirect('sales_app:r_sales_su', local=local, month=month, year=year)
+
+
+class GenerateExcel(LoginRequiredMixin, View):
+    def post(self, request, local, month, year, *args, **kwargs):
+        num_days = calendar.monthrange(year, month)[1]
+        days = [datetime.date(year, month, day) for day in range(1, num_days + 1)]
+
+        wb = Workbook()
+        ws = wb.active
+        ws.append([
+            'Fecha',
+            'Cantidad',
+            'Importe',
+        ])
+
+        for d in days:
+            sl = []
+            try:
+                s = Sales.objects.get(
+                    local__slug=local,
+                    date__day=d.day,
+                    date__month=month,
+                    date__year=year
+                )
+                sl.append(s.date)
+                sl.append(s.sale_value)
+                sl.append(s.quantity_tickets)
+            except:
+                sl.append('{}/{}/{}'.format(year, month, d.day))
+                sl.append('0')
+                sl.append('0')
+
+            ws.append(sl)
+        url = '{}/media/xls/{}-{}-{}.xlsx'.format(settings.BASE_DIR, local, month, year)
+
+        wb.save(url)
+        ExcelSales.objects.create(
+            local=Local.objects.get(slug=local),
+            date=datetime.datetime(year, month, 1),
+            url='/media/xls/{}-{}-{}.xlsx'.format(local, month, year),
+        )
         return redirect('sales_app:r_sales_su', local=local, month=month, year=year)
