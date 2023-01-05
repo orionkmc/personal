@@ -15,16 +15,28 @@ class Sales(models.Model):
 
     @property
     def total_nc(self):
-        return self.sale_value - self.nc_value
+        try:
+          return self.sale_value - self.nc_value
+        except ZeroDivisionError:
+          return 0
 
     @property
     def pxt(self):
-        return self.quantity_units / self.quantity_tickets
+        try:
+          return self.quantity_units / self.quantity_tickets
+        except ZeroDivisionError:
+          return 0
 
     @property
     def precio_promedio(self):
-        return self.sale_value / self.quantity_units
+        try:
+          return self.sale_value / self.quantity_units
+        except ZeroDivisionError:
+          return 0
 
     @property
     def ticket_promedio(self):
-        return self.sale_value / self.quantity_tickets
+        try:
+          return self.sale_value / self.quantity_tickets
+        except ZeroDivisionError:
+          return 0

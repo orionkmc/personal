@@ -11,4 +11,6 @@ urlpatterns = [
 
     path('administrador/ventas/', views.PanelSu.as_view(), name='panel_su'),
     path('administrador/ventas/<str:local>/<int:month>/<int:year>', views.MonthSaleSu.as_view(), name='r_sales_su'),
+    path('administrador/bloquear_mes/<str:local>/<int:month>/<int:year>', views.LockMonthSu.as_view(), name='lock_month_su'),
+    path('administrador/desbloquear_mes/<str:local>/<int:month>/<int:year>', views.UnlockMonthSu.as_view(), name='unlock_month_su'),
 ]

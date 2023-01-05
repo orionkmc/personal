@@ -12,15 +12,25 @@
         <time datetime="2022-01">{{ local.name }} {{month_name}} {{year}}</time>
       </h1>
       <div class="flex items-center">
-        <div class="flex items-center md:ml-4 rounded-md">
-          <button type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">Excel</button>
+        <div class="flex items-center md:ml-2 rounded-md">
+          <button type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" aria-expanded="false" aria-haspopup="true">Excel</button>
         </div>
 
-        <div class="flex items-center md:ml-4 rounded-md">
-          <button type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">Bloquear mes</button>
+        <div class="flex items-center md:ml-2 rounded-md">
+          <form action="{% url 'sales_app:lock_month_su' local.slug month year %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center rounded-md border border-indigo-300 bg-indigo-600 py-2 pl-3 pr-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700" aria-expanded="false" aria-haspopup="true">Bloquear mes</button>
+          </form>
         </div>
 
-        <div class="hidden md:ml-4 md:flex md:items-center">
+        <div class="flex items-center md:ml-2 rounded-md">
+          <form action="{% url 'sales_app:unlock_month_su' local.slug month year %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" aria-expanded="false" aria-haspopup="true">Desbloquear mes</button>
+          </form>
+        </div>
+
+        <div class="hidden md:ml-2 md:flex md:items-center">
           <div class="relative">
           <button id="month" type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">
             {{ month_name }}
@@ -44,7 +54,7 @@
           </div>
         </div>
 
-        <div class="hidden md:ml-4 md:flex md:items-center">
+        <div class="hidden md:ml-2 md:flex md:items-center">
           <div class="relative">
           <button id="year" type="button" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">
             {{ year }}
@@ -106,7 +116,7 @@
       <div class="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
         <div class="w-full grid grid-cols-6 grid-rows-5 {% if days|length > 28 %}!grid-rows-6{% endif %} gap-px">
           {% for d in days %}
-            <div class="relative flex justify-between bg-white py-2 px-3 h-24">
+            <div class="relative flex justify-between {% if not d.can_edit %}bg-indigo-200{% else %}bg-white{% endif %} py-2 px-3 h-24">
               {% if false %}
                 <span class="font-semibold"><time datetime="2022-01-01" class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">{{ d.day }}</time></span>
               {% else %}

@@ -11,16 +11,16 @@
     <h1 class="text-center text-bold">{{ month_name }} {{ year }}</h1>
     <div class="flex flex-wrap gap-1">
       {% for d in days %}
-          {% if d <= today.day %}
+          {% if d <= today %}
             <a
-              href="{% url 'sales_app:day_sales' local.slug d month year %}"
+              href="{% url 'sales_app:day_sales' local.slug d.day month year %}"
               class="flex justify-center items-center mt-2 rounded-md border border-transparent h-10 w-10 text-sm font-semibold text-white {% days_locked local.slug forloop.counter month year day %}"
-            >{{ d }}</a>
+            >{{ d.day }}</a>
           {% else %}
             <a
               href="javascript:void(0)"
               class="flex justify-center cursor-not-allowed items-center mt-2 rounded-md border border-transparent h-10 w-10 text-sm font-semibold text-white bg-cyan-400"
-            >{{ d }}</a>
+            >{{ d.day }}</a>
           {% endif %}
       {% endfor %}
     </div>

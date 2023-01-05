@@ -44,7 +44,7 @@ class MonthSale(LoginRequiredMixin, View):
         if datetime.datetime(year, month, 1) > today:
             return redirect('sales_app:resumen_sales', local=local.slug, month=today.month, year=today.year)
 
-        s = Sales.objects.filter(local=local, date__month=month, date__year=year)
+        s = Sales.objects.filter(local=local)
 
         if s.exists():
             total_valor_venta = s.aggregate(Sum('sale_value'))
@@ -52,9 +52,20 @@ class MonthSale(LoginRequiredMixin, View):
             t_c_t = s.aggregate(Sum('quantity_tickets'))
             total_valor_nc = s.aggregate(Sum('nc_value'))
 
-            total_pxt = t_c_u['quantity_units__sum'] / t_c_t['quantity_tickets__sum']
-            total_precio_promedio = total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum']
-            total_ticket_promedio = total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum']
+            try:
+              total_pxt = t_c_u['quantity_units__sum'] / t_c_t['quantity_tickets__sum']
+            except ZeroDivisionError:
+              total_pxt = 0
+
+            try:
+              total_precio_promedio = total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum']
+            except ZeroDivisionError:
+              total_precio_promedio = 0
+
+            try:
+              total_ticket_promedio = total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum']
+            except ZeroDivisionError:
+              total_ticket_promedio = 0
 
             d_max = Sales.objects.aggregate(Max('date'))
             d_min = Sales.objects.aggregate(Min('date'))
@@ -115,18 +126,21 @@ class DaySale(LoginRequiredMixin, View):
 
         test_date = datetime.datetime(year, month, day)
 
+        num_days = calendar.monthrange(year, month)[1]
+        days = [datetime.date(year, month, day) for day in range(1, num_days+1)]
+
         return render(request, 'sales/day.html', {
             'locals': local_(self.request.user),
             'local': local,
-            'days': list(range(1, int(calendar.monthrange(test_date.year, test_date.month)[1]) + 1)),
             'day': day,
+            'days': days,
             'month': month,
             'year': year,
             'month_name': months[month - 1],
             'exist': s.exists(),
             'sale': s,
             'sales_form': sales_form,
-            'today': today,
+            'today': datetime.date.today(),
         })
 
     def post(self, request, local, day, month, year, *args, **kwargs):
@@ -155,6 +169,7 @@ class DaySale(LoginRequiredMixin, View):
         return redirect('sales_app:day_sales', local=local, day=day, month=month, year=year)
 
 
+# SU
 class PanelSu(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, 'sales/admin/panel.html', {
@@ -176,12 +191,14 @@ class MonthSaleSu(LoginRequiredMixin, View):
                     'day': d,
                     'sale_value': s.sale_value,
                     'quantity_tickets': s.quantity_tickets,
+                    'can_edit': s.can_edit,
                 })
             except:
                 days.append({
                     'day': d,
                     'sale_value': 0,
                     'quantity_tickets': 0,
+                    'can_edit': True,
                 })
 
         d_max = Sales.objects.aggregate(Max('date'))
@@ -198,3 +215,42 @@ class MonthSaleSu(LoginRequiredMixin, View):
             'year': year,
             'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
         })
+
+
+class LockMonthSu(LoginRequiredMixin, View):
+    def post(self, request, local, month, year, *args, **kwargs):
+        num_days = calendar.monthrange(year, month)[1]
+        days = [datetime.date(year, month, day) for day in range(1, num_days+1)]
+
+        for d in days:
+            try:
+                s = Sales.objects.get(
+                    local__slug=local,
+                    date__day=d.day,
+                    date__month=month,
+                    date__year=year
+                )
+                s.can_edit = False
+                s.save()
+            except:
+                s = Sales.objects.create(
+                    local=Local.objects.get(slug=local),
+                    date=datetime.datetime(year, month, d.day),
+                    sale_value=float(0),
+                    quantity_units=float(0),
+                    quantity_tickets=float(0),
+                    nc_value=float(0),
+                    can_edit=False
+                )
+        return redirect('sales_app:r_sales_su', local=local, month=month, year=year)
+
+
+class UnlockMonthSu(LoginRequiredMixin, View):
+    def post(self, request, local, month, year, *args, **kwargs):
+        s = Sales.objects.filter(
+            local__slug=local,
+            date__month=month,
+            date__year=year
+        ).update(can_edit=True)
+
+        return redirect('sales_app:r_sales_su', local=local, month=month, year=year)
