@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 
 # Apps
 from apps.users.managers import UserManager
+from apps.locals.models import Local
 
 # Other
 import qrcode
@@ -56,6 +57,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         if self.qr:
             return mark_safe('<img src="/%s" width="140" />' % self.qr)
         return '-'
+
+    def locals(self):
+        if self.is_superuser:
+            return Local.objects.all()
+        else:
+            return Local.objects.filter(owner=self)
+
     qr_thumbnail.short_description = 'Qr'
     qr_thumbnail.allow_tags = True
 

@@ -38,15 +38,15 @@ def is_your_local(user, local):
 
 class MonthSale(LoginRequiredMixin, View):
     def get(self, request, local, month, year, *args, **kwargs):
-        local = Local.objects.get(slug=local)
-        if not is_your_local(request.user, local):
+        l = Local.objects.get(slug=local)
+        if not is_your_local(request.user, l):
             return redirect('users_app:user-login')
 
         today = datetime.datetime.today()
         if datetime.datetime(year, month, 1) > today:
-            return redirect('sales_app:resumen_sales', local=local.slug, month=today.month, year=today.year)
+            return redirect('sales_app:resumen_sales', local=l.slug, month=today.month, year=today.year)
 
-        s = Sales.objects.filter(local=local)
+        s = Sales.objects.filter(local=l)
 
         if s.exists():
             total_valor_venta = s.aggregate(Sum('sale_value'))
@@ -86,9 +86,10 @@ class MonthSale(LoginRequiredMixin, View):
 
         return render(request, 'sales/list.html', {
             'locals': local_(self.request.user),
-            'local': local,
+            'local': l,
             'month': month,
             'current_month': today.month,
+            'today': today,
             'months': [
                 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
                 'Noviembre', 'Diciembre'
@@ -298,8 +299,8 @@ class GenerateExcel(LoginRequiredMixin, View):
                 sl.append('{}/{}/{}'.format(year, month, d.day))
                 sl.append('0')
                 sl.append('0')
-
             ws.append(sl)
+
         url = '{}/media/xls/{}-{}-{}.xlsx'.format(settings.BASE_DIR, local, month, year)
 
         wb.save(url)
