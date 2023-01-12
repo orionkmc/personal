@@ -35,4 +35,9 @@ urlpatterns = [
         views.GenerateExcel.as_view(),
         name='generate_excel'
     ),
+    path(
+        'administrador/change-date',
+        views.ChangeDate.as_view(),
+        name='change_date'
+    ),
 ]

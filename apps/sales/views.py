@@ -310,3 +310,14 @@ class GenerateExcel(LoginRequiredMixin, View):
             url='/media/xls/{}-{}-{}.xlsx'.format(local, month, year),
         )
         return redirect('sales_app:r_sales_su', local=local, month=month, year=year)
+
+
+class ChangeDate(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+
+        return redirect(
+            'sales_app:r_sales_su',
+            local=request.GET.get('local'),
+            month=request.GET.get('month'),
+            year=request.GET.get('year')
+        )

@@ -62,7 +62,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         if self.is_superuser:
             return Local.objects.all()
         else:
-            return Local.objects.filter(owner=self)
+            if self.type_user == '1':
+                return Local.objects.filter(owner=self)
+            elif self.type_user == '2':
+                return Local.objects.filter(manager__manager=self)
 
     qr_thumbnail.short_description = 'Qr'
     qr_thumbnail.allow_tags = True
