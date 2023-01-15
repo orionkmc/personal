@@ -47,7 +47,12 @@ class MonthSale(LoginRequiredMixin, View):
             return redirect('sales_app:resumen_sales', local=l.slug, month=today.month, year=today.year)
 
         s = Sales.objects.filter(local=l)
-
+        a = s.filter(date__month=month, date__year=year, can_edit=False)
+        num_days = calendar.monthrange(year, month)[1]
+        if num_days == len(a):
+            month_locked = True
+        else:
+            month_locked = False
         if s.exists():
             total_valor_venta = s.aggregate(Sum('sale_value'))
             t_c_u = s.aggregate(Sum('quantity_units'))
@@ -97,7 +102,7 @@ class MonthSale(LoginRequiredMixin, View):
             'year': year,
             'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
             'month_name': months[month - 1],
-
+            'month_locked': month_locked,
             'total_valor_venta': total_valor_venta['sale_value__sum'],
             'total_cantidad_unidades': t_c_u['quantity_units__sum'],
             'total_cantidad_tickets': t_c_t['quantity_tickets__sum'],
@@ -119,8 +124,7 @@ class DaySale(LoginRequiredMixin, View):
         if datetime.datetime(year, month, day) > today:
             return redirect('sales_app:day_sales', local=local.slug, day=today.day, month=today.month, year=today.year)
 
-        ss = Sales.objects.filter(local=local, date__month=month, date__year=year)
-        s = ss.filter(date__day=day)
+        s = Sales.objects.filter(local=local, date__day=day, date__month=month, date__year=year)
 
         if s.exists():
             sales_form = SalesForm(instance=s[0])
@@ -217,6 +221,13 @@ class MonthSaleSu(LoginRequiredMixin, View):
         d_max = Sales.objects.aggregate(Max('date'))
         d_min = Sales.objects.aggregate(Min('date'))
 
+        a = Sales.objects.filter(local__slug=local, date__month=month, date__year=year, can_edit=False)
+        num_days = calendar.monthrange(year, month)[1]
+        if num_days == len(a):
+            month_locked = True
+        else:
+            month_locked = False
+
         return render(request, 'sales/admin/list.html', {
             'local': Local.objects.get(slug=local),
             'locals': Local.objects.all(),
@@ -225,6 +236,7 @@ class MonthSaleSu(LoginRequiredMixin, View):
             'month': month,
             'months': months,
             'month_name': months[month - 1],
+            'month_locked': month_locked,
             'year': year,
             'excel': excel,
             'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
