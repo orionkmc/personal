@@ -273,6 +273,10 @@ class LockMonthSu(LoginRequiredMixin, View):
 
 class UnlockMonthSu(LoginRequiredMixin, View):
     def post(self, request, local, month, year, *args, **kwargs):
+        es = ExcelSales.objects.filter(local__slug=local, date__month=month, date__year=year)
+        if es.exists():
+            es.delete()
+
         Sales.objects.filter(
             local__slug=local,
             date__month=month,
