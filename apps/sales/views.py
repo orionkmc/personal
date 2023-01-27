@@ -74,8 +74,16 @@ class MonthSale(LoginRequiredMixin, View):
             except ZeroDivisionError:
                 total_ticket_promedio = 0
 
-            d_max = Sales.objects.aggregate(Max('date'))
-            d_min = Sales.objects.aggregate(Min('date'))
+            try:
+                d_max = Sales.objects.get(local__slug=local).aggregate(Max('date'))
+            except:
+                d_max = {'date__max': today}
+
+            try:
+                d_min = Sales.objects.get(local__slug=local).aggregate(Min('date'))
+            except:
+                d_min = {'date__min': today}
+
         else:
             total_valor_venta = {'sale_value__sum': 0}
             t_c_u = {'quantity_units__sum': 0}
@@ -217,9 +225,15 @@ class MonthSaleSu(LoginRequiredMixin, View):
                     'quantity_tickets': 0,
                     'can_edit': True,
                 })
+        try:
+            d_max = Sales.objects.get(local__slug=local).aggregate(Max('date'))
+        except:
+            d_max = {'date__max': today}
 
-        d_max = Sales.objects.aggregate(Max('date'))
-        d_min = Sales.objects.aggregate(Min('date'))
+        try:
+            d_min = Sales.objects.get(local__slug=local).aggregate(Min('date'))
+        except:
+            d_min = {'date__min': today}
 
         a = Sales.objects.filter(local__slug=local, date__month=month, date__year=year, can_edit=False)
         num_days = calendar.monthrange(year, month)[1]
