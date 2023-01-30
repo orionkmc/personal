@@ -242,6 +242,52 @@ class MonthSaleSu(LoginRequiredMixin, View):
         else:
             month_locked = False
 
+        s = Sales.objects.filter(local__slug=local)
+
+        if s.exists():
+            total_valor_venta = s.aggregate(Sum('sale_value'))
+            t_c_u = s.aggregate(Sum('quantity_units'))
+            t_c_t = s.aggregate(Sum('quantity_tickets'))
+            total_valor_nc = s.aggregate(Sum('nc_value'))
+
+            try:
+                total_pxt = t_c_u['quantity_units__sum'] / t_c_t['quantity_tickets__sum']
+            except ZeroDivisionError:
+                total_pxt = 0
+
+            try:
+                total_precio_promedio = total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum']
+            except ZeroDivisionError:
+                total_precio_promedio = 0
+
+            try:
+                total_ticket_promedio = total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum']
+            except ZeroDivisionError:
+                total_ticket_promedio = 0
+
+            try:
+                d_max = Sales.objects.get(local__slug=local).aggregate(Max('date'))
+            except:
+                d_max = {'date__max': today}
+
+            try:
+                d_min = Sales.objects.get(local__slug=local).aggregate(Min('date'))
+            except:
+                d_min = {'date__min': today}
+
+        else:
+            total_valor_venta = {'sale_value__sum': 0}
+            t_c_u = {'quantity_units__sum': 0}
+            t_c_t = {'quantity_tickets__sum': 0}
+            total_valor_nc = {'nc_value__sum': 0}
+
+            total_pxt = 0
+            total_precio_promedio = 0
+            total_ticket_promedio = 0
+
+            d_max = {'date__max': today}
+            d_min = {'date__min': today}
+
         return render(request, 'sales/admin/list.html', {
             'local': Local.objects.get(slug=local),
             'locals': Local.objects.all(),
@@ -254,6 +300,15 @@ class MonthSaleSu(LoginRequiredMixin, View):
             'year': year,
             'excel': excel,
             'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
+
+            'total_valor_venta': total_valor_venta['sale_value__sum'],
+            'total_cantidad_unidades': t_c_u['quantity_units__sum'],
+            'total_cantidad_tickets': t_c_t['quantity_tickets__sum'],
+            'total_valor_nc': total_valor_nc['nc_value__sum'],
+
+            'total_pxt': total_pxt,
+            'total_precio_promedio': total_precio_promedio,
+            'total_ticket_promedio': total_ticket_promedio,
         })
 
 
