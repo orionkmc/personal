@@ -16,12 +16,12 @@
     <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
     <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
 
-      <div class="fixed inset-0 bg-gray-600 bg-opacity-75"></div>
+      <div id="menu1" class="fixed inset-0 bg-gray-600 bg-opacity-75 hidden"></div>
 
-      <div class="fixed inset-0 z-40 flex">
+      <div id="menu2" class="fixed inset-0 z-40 flex hidden">
         <div class="relative flex w-full max-w-xs flex-1 flex-col bg-white focus:outline-none">
 
-          <div class="absolute top-0 right-0 -mr-12 pt-2">
+          <div id="equis" class="absolute top-0 right-0 -mr-12 pt-2">
             <button type="button" class="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span class="sr-only">Close sidebar</span>
               <!-- Heroicon name: outline/x-mark -->
@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <div class="w-14 flex-shrink-0" aria-hidden="true">
+        <div id="equis2" class="w-14 flex-shrink-0" aria-hidden="true">
           <!-- Force sidebar to shrink to fit close icon -->
         </div>
       </div>
@@ -192,7 +192,7 @@
             <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
           </div>
           <div>
-            <button type="button" class="-mr-3 inline-flex h-12 w-12 items-center justify-center rounded-md text-gray-500 hover:text-gray-900">
+            <button id="button-hamburguer" type="button" class="-mr-3 inline-flex h-12 w-12 items-center justify-center rounded-md text-gray-500 hover:text-gray-900">
               <span class="sr-only">Open sidebar</span>
               <!-- Heroicon name: outline/bars-3 -->
               <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -216,7 +216,62 @@
       </div>
     </div>
   </div>
+  <script type="text/javascript">
+    let menu1 = document.getElementById("menu1");
+    let menu2 = document.getElementById("menu2");
 
+    let bhamburguer = document.getElementById("button-hamburguer");
+    let equis = document.getElementById("equis");
+    let equis2 = document.getElementById("equis2");
+
+    bhamburguer.addEventListener("click", () => {
+      menu2.classList.remove("hidden");
+      menu1.classList.remove("hidden");
+    });
+
+    equis.addEventListener("click", () => {
+      menu1.classList.add("hidden");
+      menu2.classList.add("hidden");
+    });
+
+    equis2.addEventListener("click", () => {
+      menu1.classList.add("hidden");
+      menu2.classList.add("hidden");
+    });
+/*
+    let open_m = false
+    let open_y = false
+    let month = document.getElementById("month");
+    let months = document.getElementById("months");
+
+    let year = document.getElementById("year");
+    let years = document.getElementById("years");
+
+    month.addEventListener("click", () => {
+      if (open_m) {
+        months.classList.remove("block");
+        months.classList.add("hidden");
+        open_m = false
+      } else {
+        months.classList.remove("hidden");
+        months.classList.add("block");
+        open_m = true
+      }
+    });
+
+    year.addEventListener("click", () => {
+      if (open_y) {
+        years.classList.remove("block");
+        years.classList.add("hidden");
+        open_y = false
+      } else {
+        years.classList.remove("hidden");
+        years.classList.add("block");
+        open_y = true
+      }
+    });
+*/
+  </script>
   {% block js %}{% endblock js %}
 </body>
 </html>

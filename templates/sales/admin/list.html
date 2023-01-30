@@ -6,69 +6,72 @@
 
 {% block content %}
   <div class="lg:flex lg:h-full lg:flex-col">
-    <header class="flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none">
-      <h1 class="text-lg font-semibold text-gray-900">
+    <header class="flex items-center flex-col border-b border-gray-200 py-4 px-6 lg:flex-none">
+      <h1 class="text-lg font-semibold text-gray-900 pb-5">
         <time datetime="2022-01">{{ local.name }} {{month_name}} {{year}}</time>
       </h1>
-      <div class="flex items-center">
-        {% if excel.is_excel %}
-          <div class="flex items-center md:ml-2 rounded-md">
-            <a
-              href="{{ excel.es.url }}"
-              class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-            >Descargar Excel</a>
-          </div>
-        {% else %}
-          <div class="flex items-center md:ml-2 rounded-md">
-            <form action="{% url 'sales_app:generate_excel' local.slug month year %}" method="POST">
-              {% csrf_token %}
-              <button
-                type="submit"
+      <div class="flex items-center flex-col lg:flex-row">
+        <div class="flex justify-between py-2 lg:py-0">
+          {% if excel.is_excel %}
+            <div class="flex items-center md:ml-2 rounded-md">
+              <a
+                href="{{ excel.es.url }}"
                 class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                aria-expanded="false"
-                aria-haspopup="true">Generar Excel</button>
-            </form>
-          </div>
-        {% endif %}
-        {% if month_locked %}
-          <div class="flex items-center md:ml-2 rounded-md">
-            <form action="{% url 'sales_app:unlock_month_su' local.slug month year %}" method="POST">
-              {% csrf_token %}
-              <button type="submit" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" aria-expanded="false" aria-haspopup="true">Desbloquear</button>
-            </form>
-          </div>
-        {% else %}
-          <div class="flex items-center md:ml-2 rounded-md">
-            <form action="{% url 'sales_app:lock_month_su' local.slug month year %}" method="POST">
-              {% csrf_token %}
-              <button type="submit" class="flex items-center rounded-md border border-indigo-300 bg-indigo-600 py-2 pl-3 pr-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700" aria-expanded="false" aria-haspopup="true">Bloquear</button>
-            </form>
-          </div>
-        {% endif %}
-
-
-        <div class="md:ml-2">
-          <select form="date" id="month" name="month" class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-            {% for m in months %}
-              <option value="{{ forloop.counter }}" {% if forloop.counter == month %} selected{% endif %}>{{ m }}</option>
-            {% endfor %}
-          </select>
+              >Descargar Excel</a>
+            </div>
+          {% else %}
+            <div class="flex items-center md:ml-2 rounded-md">
+              <form action="{% url 'sales_app:generate_excel' local.slug month year %}" method="POST">
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+                  aria-expanded="false"
+                  aria-haspopup="true">Generar Excel</button>
+              </form>
+            </div>
+          {% endif %}
+          {% if month_locked %}
+            <div class="flex items-center md:ml-2 rounded-md">
+              <form action="{% url 'sales_app:unlock_month_su' local.slug month year %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50" aria-expanded="false" aria-haspopup="true">Desbloquear</button>
+              </form>
+            </div>
+          {% else %}
+            <div class="flex items-center md:ml-2 rounded-md">
+              <form action="{% url 'sales_app:lock_month_su' local.slug month year %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="flex items-center rounded-md border border-indigo-300 bg-indigo-600 py-2 pl-3 pr-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700" aria-expanded="false" aria-haspopup="true">Bloquear</button>
+              </form>
+            </div>
+          {% endif %}
         </div>
 
-        <div class="md:ml-2">
-          <select form="date" id="year" name="year" class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-            {% for y in years %}
-            <option value="{{ y }}" {% if y == year %} selected{% endif %}>{{ y }}</option>
-            {% endfor %}
-          </select>
-        </div>
+        <div class="flex">
+          <div class="md:ml-2">
+            <select form="date" id="month" name="month" class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+              {% for m in months %}
+                <option value="{{ forloop.counter }}" {% if forloop.counter == month %} selected{% endif %}>{{ m }}</option>
+              {% endfor %}
+            </select>
+          </div>
 
-        <div class="flex items-center md:ml-2 rounded-md">
-          <form id="date" action="{% url 'sales_app:change_date' %}" method="GET">
-            {% csrf_token %}
-            <input type="hidden" name="local" value="{{ local.slug }}">
-            <button type="submit" class="flex items-center rounded-md border border-green-300 bg-green-600 py-2 pl-3 pr-2 text-sm font-medium text-white shadow-sm hover:bg-green-700" aria-expanded="false" aria-haspopup="true">Cambiar fecha</button>
-          </form>
+          <div class="md:ml-2">
+            <select form="date" id="year" name="year" class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+              {% for y in years %}
+              <option value="{{ y }}" {% if y == year %} selected{% endif %}>{{ y }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="flex items-center md:ml-2 rounded-md">
+            <form id="date" action="{% url 'sales_app:change_date' %}" method="GET">
+              {% csrf_token %}
+              <input type="hidden" name="local" value="{{ local.slug }}">
+              <button type="submit" class="flex items-center rounded-md border border-green-300 bg-green-600 py-2 pl-3 pr-2 text-sm font-medium text-white shadow-sm hover:bg-green-700" aria-expanded="false" aria-haspopup="true">Cambiar fecha</button>
+            </form>
+          </div>
         </div>
 
       </div>
