@@ -120,8 +120,8 @@
                 <span class="font-semibold text-base"><time datetime="{{ year }}-{{ month }}-{{ d.day }}">{{ d.day }}</time></span>
               {% endif %}
               <div class="flex justify-between flex-col">
-                <span>{{ d.sale_value }}</span>
-                <span>{{ d.quantity_tickets }}</span>
+                <span>{{ d.sale_value|floatformat:-2 }}</span>
+                <span>{{ d.quantity_tickets|floatformat:-2 }}</span>
               </div>
             </div>
           {% endfor %}
