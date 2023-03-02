@@ -256,12 +256,12 @@ class MonthSaleSu(LoginRequiredMixin, View):
                 total_pxt = 0
 
             try:
-                total_precio_promedio = total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum']
+                total_precio_promedio = round(total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum'], 2)
             except ZeroDivisionError:
                 total_precio_promedio = 0
 
             try:
-                total_ticket_promedio = total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum']
+                total_ticket_promedio = round(total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum'], 2)
             except ZeroDivisionError:
                 total_ticket_promedio = 0
 
