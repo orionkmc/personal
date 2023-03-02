@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 
 {% load static %}
+{% load humanize %}
+
 
 {% block css %}{% endblock css %}
 
@@ -120,8 +122,8 @@
                 <span class="font-semibold text-base"><time datetime="{{ year }}-{{ month }}-{{ d.day }}">{{ d.day }}</time></span>
               {% endif %}
               <div class="flex justify-between flex-col">
-                <span>{{ d.sale_value|floatformat:-2 }}</span>
-                <span>{{ d.quantity_tickets|floatformat:-2 }}</span>
+                <span>${{ d.sale_value|floatformat:-2|intcomma }}</span>
+                <span>{{ d.quantity_tickets|floatformat:-2|intcomma }}</span>
               </div>
             </div>
           {% endfor %}
@@ -142,7 +144,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Valor Venta = {{ total_valor_venta|floatformat:-2 }}
+            Total Valor Venta = ${{ total_valor_venta|floatformat:-2|intcomma }}
           </dd>
         </div>
         <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -150,7 +152,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Cantidad Unidades = {{ total_cantidad_unidades|floatformat:-2 }}
+            Total Cantidad Unidades = {{ total_cantidad_unidades|floatformat:-2|intcomma }}
           </dd>
         </div>
         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -158,7 +160,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Cantidad Tickets = {{ total_cantidad_tickets|floatformat:-2 }}
+            Total Cantidad Tickets = {{ total_cantidad_tickets|floatformat:-2|intcomma }}
           </dd>
         </div>
         <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -166,7 +168,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Valor NC = {{ total_valor_nc|floatformat:-2}}
+            Total Valor NC = ${{ total_valor_nc|floatformat:-2|intcomma}}
           </dd>
         </div>
         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -174,7 +176,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total PXT = {{ total_pxt|floatformat:-2 }}
+            Total PXT = {{ total_pxt|floatformat:-2|intcomma }}
           </dd>
         </div>
         <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -182,7 +184,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Precio Promedio = {{ total_precio_promedio|floatformat:-2 }}
+            Total Precio Promedio = ${{ total_precio_promedio|floatformat:-2|intcomma }}
           </dd>
         </div>
         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -190,7 +192,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Ticket Promedio = {{ total_ticket_promedio|floatformat:-2 }}
+            Total Ticket Promedio = ${{ total_ticket_promedio|floatformat:-2|intcomma }}
           </dd>
         </div>
       </dl>
