@@ -123,7 +123,7 @@
               {% localize on %}
                 <div class="flex justify-between flex-col">
                   <span>${{ d.sale_value|intcomma }}</span>
-                  <span>{{ d.quantity_tickets|intcomma }}</span>
+                  <span>{{ d.quantity_tickets|floatformat:0 }}</span>
                 </div>
               {% endlocalize %}
             </div>
