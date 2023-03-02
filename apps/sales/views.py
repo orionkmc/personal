@@ -46,7 +46,7 @@ class MonthSale(LoginRequiredMixin, View):
         if datetime.datetime(year, month, 1) > today:
             return redirect('sales_app:resumen_sales', local=l.slug, month=today.month, year=today.year)
 
-        s = Sales.objects.filter(local=l)
+        s = Sales.objects.filter(local=l, date__month=month, date__year=year)
         a = s.filter(date__month=month, date__year=year, can_edit=False)
         num_days = calendar.monthrange(year, month)[1]
         if num_days == len(a):
@@ -242,7 +242,7 @@ class MonthSaleSu(LoginRequiredMixin, View):
         else:
             month_locked = False
 
-        s = Sales.objects.filter(local__slug=local)
+        s = Sales.objects.filter(local__slug=local, date__month=month, date__year=year)
 
         if s.exists():
             total_valor_venta = s.aggregate(Sum('sale_value'))
