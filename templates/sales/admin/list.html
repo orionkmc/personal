@@ -2,7 +2,7 @@
 
 {% load static %}
 {% load humanize %}
-
+{% load l10n %}
 
 {% block css %}{% endblock css %}
 
@@ -58,7 +58,7 @@
               {% endfor %}
             </select>
           </div>
-
+      
           <div class="md:ml-2">
             <select form="date" id="year" name="year" class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
               {% for y in years %}
@@ -66,7 +66,6 @@
               {% endfor %}
             </select>
           </div>
-
           <div class="flex items-center md:ml-2 rounded-md">
             <form id="date" action="{% url 'sales_app:change_date' %}" method="GET">
               {% csrf_token %}
@@ -121,10 +120,12 @@
               {% else %}
                 <span class="font-semibold text-base"><time datetime="{{ year }}-{{ month }}-{{ d.day }}">{{ d.day }}</time></span>
               {% endif %}
-              <div class="flex justify-between flex-col">
-                <span>${{ d.sale_value|floatformat:-2|intcomma }}</span>
-                <span>{{ d.quantity_tickets|floatformat:-2|intcomma }}</span>
-              </div>
+              {% localize on %}
+                <div class="flex justify-between flex-col">
+                  <span>${{ d.sale_value|intcomma }}</span>
+                  <span>{{ d.quantity_tickets|floatformat:-2 }}</span>
+                </div>
+              {% endlocalize %}
             </div>
           {% endfor %}
         </div>
@@ -137,14 +138,14 @@
         <h3 class="text-lg font-medium leading-6 text-gray-900">Resumen</h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">Mensual</p>
       </div>
-
+      {% localize on %}
       <dl>
         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dd class="flex mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Valor Venta = ${{ total_valor_venta|floatformat:-2|intcomma }}
+            Total Valor Venta = ${{ total_valor_venta|intcomma }}
           </dd>
         </div>
         <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -152,7 +153,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Cantidad Unidades = {{ total_cantidad_unidades|floatformat:-2|intcomma }}
+            Total Cantidad Unidades = {{ total_cantidad_unidades|floatformat:-2 }}
           </dd>
         </div>
         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -160,7 +161,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Cantidad Tickets = {{ total_cantidad_tickets|floatformat:-2|intcomma }}
+            Total Cantidad Tickets = {{ total_cantidad_tickets|floatformat:-2 }}
           </dd>
         </div>
         <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -168,7 +169,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Valor NC = ${{ total_valor_nc|floatformat:-2|intcomma}}
+            Total Valor NC = ${{ total_valor_nc|floatformat:-2}}
           </dd>
         </div>
         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -176,7 +177,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total PXT = {{ total_pxt|floatformat:-2|intcomma }}
+            Total PXT = {{ total_pxt|floatformat:-2 }}
           </dd>
         </div>
         <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -184,7 +185,7 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Precio Promedio = ${{ total_precio_promedio|floatformat:-2|intcomma }}
+            Total Precio Promedio = ${{ total_precio_promedio|intcomma }}
           </dd>
         </div>
         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -192,10 +193,11 @@
             <svg class="h-6 w-6 mr-2"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Total Ticket Promedio = ${{ total_ticket_promedio|floatformat:-2|intcomma }}
+            Total Ticket Promedio = ${{ total_ticket_promedio|intcomma }}
           </dd>
         </div>
       </dl>
+      {% endlocalize %}
     </div>
   </div>
 {% endblock content %}
