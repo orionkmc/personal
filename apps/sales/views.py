@@ -111,14 +111,14 @@ class MonthSale(LoginRequiredMixin, View):
             'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
             'month_name': months[month - 1],
             'month_locked': month_locked,
-            'total_valor_venta': total_valor_venta['sale_value__sum'],
-            'total_cantidad_unidades': t_c_u['quantity_units__sum'],
-            'total_cantidad_tickets': t_c_t['quantity_tickets__sum'],
-            'total_valor_nc': total_valor_nc['nc_value__sum'],
+            'total_valor_venta': round(total_valor_venta['sale_value__sum'], 2),
+            'total_cantidad_tickets': round(t_c_t['quantity_tickets__sum']),
+            'total_cantidad_unidades': round(t_c_u['quantity_units__sum']),
+            'total_valor_nc': round(total_valor_nc['nc_value__sum']),
 
-            'total_pxt': total_pxt,
-            'total_precio_promedio': total_precio_promedio,
-            'total_ticket_promedio': total_ticket_promedio,
+            'total_pxt': round(total_pxt),
+            'total_precio_promedio': round(total_precio_promedio, 2),
+            'total_ticket_promedio': round(total_ticket_promedio, 2),
         })
 
 
@@ -256,12 +256,12 @@ class MonthSaleSu(LoginRequiredMixin, View):
                 total_pxt = 0
 
             try:
-                total_precio_promedio = round(total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum'], 2)
+                total_precio_promedio = total_valor_venta['sale_value__sum'] / t_c_u['quantity_units__sum']
             except ZeroDivisionError:
                 total_precio_promedio = 0
 
             try:
-                total_ticket_promedio = round(total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum'], 2)
+                total_ticket_promedio = total_valor_venta['sale_value__sum'] / t_c_t['quantity_tickets__sum']
             except ZeroDivisionError:
                 total_ticket_promedio = 0
 
@@ -301,14 +301,14 @@ class MonthSaleSu(LoginRequiredMixin, View):
             'excel': excel,
             'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
 
-            'total_valor_venta': total_valor_venta['sale_value__sum'],
-            'total_cantidad_unidades': t_c_u['quantity_units__sum'],
-            'total_cantidad_tickets': t_c_t['quantity_tickets__sum'],
-            'total_valor_nc': total_valor_nc['nc_value__sum'],
+            'total_valor_venta': round(total_valor_venta['sale_value__sum'], 2),
+            'total_cantidad_unidades': round(t_c_u['quantity_units__sum']),
+            'total_cantidad_tickets': round(t_c_t['quantity_tickets__sum']),
+            'total_valor_nc': round(total_valor_nc['nc_value__sum']),
 
-            'total_pxt': total_pxt,
-            'total_precio_promedio': total_precio_promedio,
-            'total_ticket_promedio': total_ticket_promedio,
+            'total_pxt': round(total_pxt),
+            'total_precio_promedio': round(total_precio_promedio, 2),
+            'total_ticket_promedio': round(total_ticket_promedio, 2),
         })
 
 
