@@ -365,9 +365,9 @@ class GenerateExcel(LoginRequiredMixin, View):
         ws.append([
             'Fecha',
             'Cantidad',
+            'Total con NC',
             'Importe',
         ])
-
         for d in days:
             sl = []
             try:
@@ -379,9 +379,11 @@ class GenerateExcel(LoginRequiredMixin, View):
                 )
                 sl.append(s.date)
                 sl.append(s.sale_value)
+                sl.append(s.total_nc)
                 sl.append(s.quantity_tickets)
             except:
                 sl.append('{}/{}/{}'.format(year, month, d.day))
+                sl.append('0')
                 sl.append('0')
                 sl.append('0')
             ws.append(sl)
