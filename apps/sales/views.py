@@ -14,7 +14,7 @@ from openpyxl import Workbook
 import datetime
 import calendar
 months = (
-    "Enero", "Febrero", "Marzo", "Abri", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre",
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre",
     "Diciembre"
 )
 
@@ -104,7 +104,7 @@ class MonthSale(LoginRequiredMixin, View):
             'current_month': today.month,
             'today': today,
             'months': [
-                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
+                'Enero', 'Febrero', 'Marzo', 'Abrlil', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
                 'Noviembre', 'Diciembre'
             ],
             'year': year,
