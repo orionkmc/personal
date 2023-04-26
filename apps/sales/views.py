@@ -276,6 +276,8 @@ class MonthSaleSu(LoginRequiredMixin, View):
                 d_min = {'date__min': today}
             
             try:
+                print(round(total_valor_venta['sale_value__sum'], 2))
+                print(round(total_valor_nc['nc_value__sum']))
                 total_nc = round(total_valor_venta['sale_value__sum'], 2) - round(total_valor_nc['nc_value__sum'])
             except:
                 total_nc = 0
