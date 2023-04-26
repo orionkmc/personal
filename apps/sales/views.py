@@ -274,12 +274,18 @@ class MonthSaleSu(LoginRequiredMixin, View):
                 d_min = Sales.objects.get(local__slug=local).aggregate(Min('date'))
             except:
                 d_min = {'date__min': today}
+            
+            try:
+                total_nc = round(total_valor_venta['sale_value__sum'], 2) - round(total_valor_nc['nc_value__sum'])
+            except:
+                total_nc = 0
 
         else:
             total_valor_venta = {'sale_value__sum': 0}
             t_c_u = {'quantity_units__sum': 0}
             t_c_t = {'quantity_tickets__sum': 0}
             total_valor_nc = {'nc_value__sum': 0}
+            total_nc = { 'total_nc': 0 }
 
             total_pxt = 0
             total_precio_promedio = 0
@@ -305,6 +311,7 @@ class MonthSaleSu(LoginRequiredMixin, View):
             'total_cantidad_unidades': round(t_c_u['quantity_units__sum']),
             'total_cantidad_tickets': round(t_c_t['quantity_tickets__sum']),
             'total_valor_nc': round(total_valor_nc['nc_value__sum']),
+            'total_nc': total_nc,
 
             'total_pxt': round(total_pxt),
             'total_precio_promedio': round(total_precio_promedio, 2),
