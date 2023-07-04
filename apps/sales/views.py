@@ -395,13 +395,14 @@ class GenerateExcel(LoginRequiredMixin, View):
                 sl.append('0')
             ws.append(sl)
 
-        url = '{}/media/xls/{}-{}-{}.xlsx'.format(settings.BASE_DIR, local, month, year)
+        base_url = '/media/xls/{}-{}.xlsx'.format(local, datetime.datetime.now())
+        url = '{}{}'.format(settings.BASE_DIR, base_url)
 
         wb.save(url)
         ExcelSales.objects.create(
             local=Local.objects.get(slug=local),
             date=datetime.datetime(year, month, 1),
-            url='/media/xls/{}-{}-{}.xlsx'.format(local, month, year),
+            url=base_url,
         )
         return redirect('sales_app:r_sales_su', local=local, month=month, year=year)
 
