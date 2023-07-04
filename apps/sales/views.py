@@ -216,6 +216,8 @@ class MonthSaleSu(LoginRequiredMixin, View):
                     'day': d,
                     'sale_value': s.sale_value,
                     'quantity_tickets': s.quantity_tickets,
+                    'nc_value': s.nc_value,
+                    'observations': s.observations,
                     'can_edit': s.can_edit,
                 })
             except:
@@ -223,6 +225,8 @@ class MonthSaleSu(LoginRequiredMixin, View):
                     'day': d,
                     'sale_value': 0,
                     'quantity_tickets': 0,
+                    'nc_value': 0,
+                    'observations': '',
                     'can_edit': True,
                 })
         try:
