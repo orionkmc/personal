@@ -108,7 +108,7 @@ class MonthSale(LoginRequiredMixin, View):
                 'Noviembre', 'Diciembre'
             ],
             'year': year,
-            'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
+            'years': list(range(d_min['date__min'].year - 1, int(d_max['date__max'].year) + 2)),
             'month_name': months[month - 1],
             'month_locked': month_locked,
             'total_valor_venta': round(total_valor_venta['sale_value__sum'], 2),
@@ -309,7 +309,7 @@ class MonthSaleSu(LoginRequiredMixin, View):
             'month_locked': month_locked,
             'year': year,
             'excel': excel,
-            'years': list(range(d_min['date__min'].year, int(d_max['date__max'].year) + 2)),
+            'years': list(range(d_min['date__min'].year - 1, int(d_max['date__max'].year) + 2)),
 
             'total_valor_venta': round(total_valor_venta['sale_value__sum'], 2),
             'total_cantidad_unidades': round(t_c_u['quantity_units__sum']),
